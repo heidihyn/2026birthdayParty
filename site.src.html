@@ -1,0 +1,888 @@
+<title>Heartware Beta Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: one long mobile-first "employee portal" page, sticky section chips on top,
+   each section a numbered-free panel on a faint blueprint grid. Single dark look, on purpose. */
+:root {
+  color-scheme: dark;
+  --bg: #07090d;
+  --panel: #0d1117;
+  --line: #1d2530;
+  --fg: #e7ecf2;
+  --muted: #8a96a6;
+  --ice: #6fd3ff;
+  --alarm: #ff3b4e;
+  --ok: #3ee08f;
+  --hacker: #ff3b4e; --leaker: #b58cff; --auditor: #5ccfff; --cofounder: #ffc53d;
+  --witness: #c9d1dc; --lawyer: #ff8a3d; --companion: #ff6fb0; --employee: #ffffff;
+  --display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --body: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 64px); }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } *, *::before { animation: none !important; transition: none !important; } }
+body {
+  margin: 0; background: var(--bg); color: var(--fg);
+  font: 16px/1.55 var(--body);
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 56px 56px; background-position: -1px -1px;
+  background-attachment: fixed;
+}
+body::before { /* soften the grid toward the center */
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0;
+  background: radial-gradient(ellipse at 50% 30%, rgba(7,9,13,.55), rgba(7,9,13,.92) 70%);
+}
+.wrap { position: relative; z-index: 1; max-width: 720px; margin: 0 auto; padding-inline: 16px; padding-block: 0 64px; }
+a { color: var(--ice); }
+:focus-visible { outline: 2px solid var(--ice); outline-offset: 3px; }
+.mono, .label { font-family: var(--mono); }
+.label { font-size: 11.5px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); }
+
+/* header */
+.top { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 22px 18px; border-bottom: 1px solid var(--line); }
+.brand { display: flex; align-items: center; gap: 10px; font-family: var(--display); font-weight: 700; font-stretch: 125%; letter-spacing: .28em; font-size: 15px; }
+.ring { width: 22px; height: 22px; border: 2.5px solid var(--fg); border-radius: 50%; display: grid; place-items: center; flex: none; }
+.ring::after { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--fg); }
+.stamp { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; color: var(--alarm); border: 1.5px solid var(--alarm); padding: 3px 8px; white-space: nowrap; }
+
+/* hero */
+.hero { padding-block: 36px 28px; display: grid; gap: 14px; }
+.hero h1 { margin: 0; font-family: var(--display); font-weight: 800; font-stretch: 70%; font-size: clamp(48px, 15vw, 96px); line-height: .9; letter-spacing: -.01em; text-transform: uppercase; text-wrap: balance; }
+.hero h1 em { font-style: normal; color: var(--ice); }
+.hero p { margin: 0; max-width: 34em; color: #c3ccd7; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; }
+.fact { font-family: var(--mono); font-size: 12.5px; padding: 6px 10px; border: 1px solid var(--line); background: var(--panel); }
+.fact b { color: var(--ice); font-weight: 500; }
+.boot { font-family: var(--mono); font-size: 12px; color: var(--ok); }
+.boot::after { content: "_"; animation: blink 1s steps(1) infinite; }
+@keyframes blink { 50% { opacity: 0; } }
+
+/* sticky nav */
+nav.chips { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; margin-inline: -16px; padding: 10px 16px; background: rgba(7,9,13,.94); border-block: 1px solid var(--line); display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px); }
+nav.chips::-webkit-scrollbar { display: none; }
+nav.chips a { flex: none; text-decoration: none; color: var(--fg); font-family: var(--mono); font-size: 12.5px; letter-spacing: .04em; padding: 7px 12px; border: 1px solid var(--line); background: var(--panel); }
+nav.chips a.hot { border-color: var(--ice); color: var(--ice); }
+
+/* sections */
+section { padding-block: 44px 8px; }
+.sec-head { display: grid; gap: 6px; margin-bottom: 18px; }
+h2 { margin: 0; font-family: var(--display); font-weight: 800; font-stretch: 75%; font-size: clamp(34px, 9vw, 48px); line-height: 1; text-transform: uppercase; text-wrap: balance; }
+h3 { margin: 0; font-family: var(--display); font-weight: 700; font-size: 20px; line-height: 1.2; }
+.lede { margin: 0; color: #c3ccd7; max-width: 36em; }
+.panel { background: var(--panel); border: 1px solid var(--line); padding: 20px; }
+.note { font-size: 14px; color: var(--muted); margin: 12px 0 0; }
+
+/* role lookup */
+.lookup { border-color: #24506a; box-shadow: 0 0 0 1px rgba(111,211,255,.08), 0 20px 60px -30px rgba(111,211,255,.35); display: grid; gap: 14px; }
+.lookup form { display: flex; gap: 8px; flex-wrap: wrap; }
+.lookup input { flex: 1 1 200px; min-width: 0; font: 500 20px/1 var(--mono); letter-spacing: .06em; color: var(--fg); background: #05070a; border: 1px solid #2a3544; padding: 14px 14px; }
+.lookup input::placeholder { color: #465264; }
+.btn { font: 600 15px/1 var(--body); letter-spacing: .02em; padding: 15px 18px; border: 0; background: var(--ice); color: #041018; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+.btn:disabled { opacity: .6; cursor: progress; }
+.btn.ghost { background: transparent; color: var(--ice); border: 1px solid var(--ice); }
+.result { display: grid; gap: 14px; }
+.verdict { font-family: var(--mono); font-size: 13px; letter-spacing: .06em; padding: 12px 14px; border: 1px solid var(--line); }
+.verdict.bad { border-color: var(--alarm); color: #ffd3d8; }
+.verdict.wait { border-color: #3b4a5c; color: #c3ccd7; }
+.role-hit { display: grid; gap: 12px; }
+.role-hit .who { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.role-hit .name { font-family: var(--display); font-weight: 800; font-stretch: 80%; font-size: 56px; line-height: .95; }
+.secret { border: 1px solid currentColor; padding: 14px 16px; font-size: 17px; }
+.secret .label { display: block; margin-bottom: 4px; color: inherit; opacity: .8; }
+.secret p { margin: 0; color: var(--fg); }
+.role-hit img { width: 100%; border: 1px solid var(--line); display: block; }
+.todo { margin: 0; padding-left: 20px; color: #c3ccd7; font-size: 15px; display: grid; gap: 4px; }
+
+/* timeline */
+.tl { list-style: none; margin: 0; padding: 0; display: grid; }
+.tl li { display: grid; grid-template-columns: 74px 1fr; gap: 14px; position: relative; padding-bottom: 22px; }
+.tl li::before { content: ""; position: absolute; left: 86px; top: 8px; bottom: 0; width: 1px; background: var(--line); }
+.tl li:last-child::before { display: none; }
+.tl .t { font-family: var(--mono); font-size: 13px; color: var(--ice); padding-top: 2px; text-align: right; font-variant-numeric: tabular-nums; }
+.tl .d { padding-left: 18px; position: relative; min-width: 0; }
+.tl .d::before { content: ""; position: absolute; left: -5px; top: 7px; width: 9px; height: 9px; background: var(--bg); border: 2px solid var(--ice); border-radius: 50%; }
+.tl .d p { margin: 4px 0 0; color: #c3ccd7; font-size: 15px; }
+.tl .redact .t { color: var(--alarm); }
+.tl .redact .d::before { border-color: var(--alarm); }
+.bars { display: grid; gap: 7px; margin-top: 8px; }
+.bars span { display: block; height: 14px; background: #1a1f27; position: relative; overflow: hidden; }
+.bars span:nth-child(1) { width: 92%; } .bars span:nth-child(2) { width: 70%; } .bars span:nth-child(3) { width: 81%; }
+.bars span::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, transparent, rgba(255,59,78,.35), transparent); transform: translateX(-100%); animation: sweep 3.2s ease-in-out infinite; }
+.bars span:nth-child(2)::after { animation-delay: .5s; } .bars span:nth-child(3)::after { animation-delay: 1s; }
+@keyframes sweep { 60%, 100% { transform: translateX(100%); } }
+.q { font-family: var(--display); font-weight: 800; font-stretch: 70%; font-size: 28px; color: var(--alarm); letter-spacing: .08em; }
+
+/* roles */
+.roles { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.role { background: var(--panel); padding: 16px 18px 16px 20px; display: grid; grid-template-columns: minmax(0, 150px) minmax(0, 1fr); gap: 6px 18px; border-left: 4px solid var(--c); }
+.role h3 { color: var(--c); font-size: 24px; font-stretch: 85%; font-weight: 800; }
+.role .meta { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; color: var(--muted); text-transform: uppercase; margin-top: 2px; }
+.role p { margin: 0; font-size: 15px; }
+.role .win { display: block; font-size: 13.5px; color: var(--muted); margin-top: 4px; }
+@media (max-width: 480px) { .role { grid-template-columns: 1fr; } }
+.ends { margin-top: 14px; border: 1px solid var(--ice); padding: 16px 18px; }
+.ends .label { color: var(--ice); }
+.ends p { margin: 6px 0 0; }
+
+/* drinks */
+.menu { display: grid; gap: 0; }
+.drink { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 14px; padding-block: 16px; border-bottom: 1px solid var(--line); }
+.drink:first-child { padding-top: 0; }
+.dot { width: 20px; height: 20px; border-radius: 50%; margin-top: 4px; background: radial-gradient(circle at 35% 30%, #fff 0 12%, var(--c) 55%, #000 140%); }
+.drink h3 { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 22px; }
+.tag { font-family: var(--mono); font-size: 10.5px; letter-spacing: .14em; padding: 3px 6px; border: 1px solid; font-weight: 500; }
+.tag.glow { color: #9fb6ff; } .tag.zero { color: var(--ok); } .tag.door { color: var(--muted); }
+.drink i { display: block; color: #c3ccd7; }
+.drink .mono { font-size: 12px; letter-spacing: .12em; color: var(--muted); text-transform: uppercase; }
+.steps { counter-reset: s; list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.steps li { counter-increment: s; display: grid; grid-template-columns: 34px minmax(0, 1fr); gap: 12px; align-items: start; }
+.steps li::before { content: counter(s); font-family: var(--mono); font-size: 14px; width: 30px; height: 30px; display: grid; place-items: center; border: 1px solid var(--ice); color: var(--ice); }
+.steps b { color: var(--fg); }
+.two { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.two > * { min-width: 0; }
+.warn { border-left: 3px solid var(--alarm); padding: 10px 14px; background: rgba(255,59,78,.06); font-size: 14.5px; margin: 0; }
+
+/* food */
+.scroll { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 14.5px; min-width: 460px; }
+th, td { text-align: left; padding: 11px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--mono); font-weight: 500; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
+td.c, th.c { text-align: center; }
+td small { display: block; font-family: var(--mono); font-size: 11px; letter-spacing: .08em; color: var(--ice); text-transform: uppercase; }
+.y { color: var(--ok); } .n { color: var(--alarm); } .m { color: var(--cofounder); }
+
+/* NDA: document viewer */
+.viewer { border: 1px solid var(--line); background: #10151c; }
+.viewer-bar { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-bottom: 1px solid var(--line); background: var(--panel); flex-wrap: wrap; }
+.doc-ico { flex: none; width: 34px; height: 42px; display: grid; place-items: end center; padding-bottom: 5px; font: 600 9px var(--mono); letter-spacing: .08em; color: #fff; background: linear-gradient(135deg, transparent 0 9px, var(--alarm) 9px); clip-path: polygon(0 0, 70% 0, 100% 22%, 100% 100%, 0 100%); }
+.doc-meta { display: grid; min-width: 0; flex: 1 1 180px; }
+.doc-meta b { font-weight: 600; font-size: 14.5px; overflow-wrap: anywhere; }
+.doc-meta span { font-family: var(--mono); font-size: 11.5px; color: var(--muted); letter-spacing: .04em; }
+.viewer-bar .btn { padding: 11px 14px; font-size: 14px; }
+.viewer-stage { padding: 22px 18px; background: repeating-linear-gradient(0deg, #0b0f14 0 2px, #0d1218 2px 4px); display: grid; justify-items: center; }
+.sheet { display: block; width: 100%; max-width: 560px; height: auto; background: #fff; box-shadow: 0 1px 0 rgba(255,255,255,.06), 0 24px 50px -18px rgba(0,0,0,.9), 0 0 0 1px rgba(0,0,0,.4); }
+.viewer-foot { display: flex; justify-content: space-between; gap: 10px; padding: 9px 14px; border-top: 1px solid var(--line); font-family: var(--mono); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
+
+/* DJ + photos */
+.cta-row { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 16px; }
+.pending { font-family: var(--mono); font-size: 13px; color: var(--cofounder); border: 1px dashed var(--cofounder); padding: 10px 12px; }
+.search { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.search input { flex: 1 1 200px; min-width: 0; font: 16px var(--body); color: var(--fg); background: #05070a; border: 1px solid #2a3544; padding: 12px; }
+.eq { display: flex; gap: 4px; align-items: flex-end; height: 34px; margin-bottom: 8px; }
+.eq i { width: 6px; background: var(--ice); animation: eq 1.1s ease-in-out infinite; height: 30%; }
+.eq i:nth-child(2) { animation-delay: .2s } .eq i:nth-child(3) { animation-delay: .4s } .eq i:nth-child(4) { animation-delay: .1s } .eq i:nth-child(5) { animation-delay: .3s }
+@keyframes eq { 50% { height: 100%; } }
+.film { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 16px; }
+.film span { aspect-ratio: 3 / 4; max-width: 100%; border: 1px solid var(--line); background: repeating-linear-gradient(135deg, #0b0f15 0 8px, #0e131a 8px 16px); display: grid; place-items: end start; padding: 6px; font: 10px var(--mono); letter-spacing: .12em; color: #4f5c6e; }
+
+/* verdict */
+.slots { display: grid; gap: 1px; background: var(--line); border: 1px solid var(--line); }
+.slot { background: var(--panel); padding: 14px 16px; display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 12px; align-items: start; }
+.slot .tn { font-family: var(--mono); font-size: 12px; letter-spacing: .14em; color: var(--muted); padding-top: 4px; }
+.slot .sus { font-family: var(--display); font-weight: 800; font-stretch: 80%; font-size: 26px; line-height: 1.05; }
+.slot .why { margin: 4px 0 0; color: #c3ccd7; font-size: 14.5px; }
+.slot.sealed .sus { color: #3a4556; letter-spacing: .1em; }
+.slot.new { animation: land .9s ease-out; }
+@keyframes land { from { background: rgba(255,59,78,.25); } }
+.tally { display: grid; gap: 10px; margin-top: 16px; }
+.bar { display: grid; grid-template-columns: minmax(0, 120px) minmax(0, 1fr) 24px; gap: 10px; align-items: center; font-size: 14.5px; }
+.bar .nm { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.bar .track { height: 14px; background: #161c25; }
+.bar .fill { height: 100%; background: var(--ice); }
+.bar.lead .fill { background: var(--alarm); }
+.bar .ct { font-family: var(--mono); text-align: right; font-variant-numeric: tabular-nums; }
+.fired { margin-top: 16px; border: 2px solid var(--alarm); padding: 16px 18px; background: rgba(255,59,78,.08); }
+.fired .label { color: var(--alarm); }
+.fired .who { font-family: var(--display); font-weight: 800; font-stretch: 75%; font-size: clamp(36px, 11vw, 60px); line-height: 1; text-transform: uppercase; margin-top: 6px; }
+.fired p { margin: 8px 0 0; color: #c3ccd7; }
+.host { margin-top: 18px; border: 1px dashed var(--cofounder); padding: 16px; display: grid; gap: 12px; }
+.host .label { color: var(--cofounder); }
+.host-row { display: grid; grid-template-columns: 58px minmax(0, 1fr) minmax(0, 1.3fr) auto; gap: 8px; align-items: center; }
+.host-row span { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+.host input { min-width: 0; font: 15px var(--body); color: var(--fg); background: #05070a; border: 1px solid #2a3544; padding: 10px; }
+@media (max-width: 480px) { .host-row { grid-template-columns: 1fr 1fr; } .host-row span, .host-row button { grid-column: 1 / -1; } }
+.host .msg { font-family: var(--mono); font-size: 12.5px; color: var(--cofounder); min-height: 1em; margin: 0; }
+.btn.warn-btn { background: transparent; color: var(--alarm); border: 1px solid var(--alarm); }
+.card-hit { border: 1px solid currentColor; padding: 18px; display: grid; gap: 10px; }
+.card-hit .tagline { font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; background: currentColor; justify-self: start; padding: 4px 8px; }
+.card-hit .tagline b { color: #07090d; font-weight: 500; }
+.card-hit p { margin: 0; color: var(--fg); }
+.card-hit .how { border-top: 1px solid var(--line); padding-top: 10px; }
+.card-hit .how .label { color: inherit; }
+
+/* projector mode: link ending in #tally shows only the Verdict, big, with no host panel */
+.tally-mode .wrap { max-width: 1100px; }
+.tally-mode .wrap > :not(#verdict) { display: none !important; }
+.tally-mode #host { display: none !important; }
+.tally-mode #verdict { padding-top: 24px; }
+.tally-mode .fold > summary > .chev { display: none; }
+.tally-mode .fold-body { display: block !important; }
+.tally-mode h2 { font-size: 64px; }
+.tally-mode .lede { font-size: 20px; max-width: none; }
+.tally-mode .slots { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+.tally-mode .slot { grid-template-columns: 1fr; padding: 18px; gap: 6px; align-content: start; }
+.tally-mode .slot .tn { font-size: 16px; }
+.tally-mode .slot .sus { font-size: 34px; overflow-wrap: anywhere; }
+.tally-mode .slot .why { font-size: 17px; }
+.tally-mode .bar { grid-template-columns: minmax(0, 240px) minmax(0, 1fr) 40px; font-size: 22px; }
+.tally-mode .bar .track { height: 22px; }
+.tally-mode .fired .who { font-size: 64px; }
+
+/* hero hook */
+.notice { border: 1px solid var(--cofounder); border-left-width: 4px; background: rgba(255,197,61,.07); padding: 12px 14px; display: grid; gap: 4px; }
+.notice .label { color: var(--cofounder); }
+.notice p { margin: 0; color: var(--fg); font-size: 15.5px; }
+.notice b { font-weight: 600; }
+.btn.rsvp { justify-self: start; font-size: 17px; padding: 16px 22px; box-shadow: 0 0 0 1px rgba(111,211,255,.25), 0 12px 40px -12px rgba(111,211,255,.6); }
+@media (max-width: 480px) { .btn.rsvp { justify-self: stretch; justify-content: center; } }
+.hook { list-style: none; counter-reset: h; margin: 6px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.hook li { counter-increment: h; min-width: 0; }
+.hook a { display: grid; gap: 2px; height: 100%; text-decoration: none; color: var(--fg); padding: 12px; border: 1px solid #24506a; background: rgba(111,211,255,.05); }
+.hook a::before { content: "0" counter(h); font-family: var(--mono); font-size: 11px; color: var(--ice); letter-spacing: .1em; }
+.hook b { font-family: var(--display); font-weight: 700; font-size: 17px; line-height: 1.15; }
+.hook span { font-size: 12.5px; color: var(--muted); }
+@media (max-width: 480px) { .hook { grid-template-columns: 1fr; } .hook a { grid-template-columns: 28px 1fr; } .hook a::before { grid-row: span 2; padding-top: 3px; } }
+
+/* collapsible sections */
+.fold > summary { list-style: none; cursor: pointer; display: grid; grid-template-columns: minmax(0, 1fr) 36px; gap: 4px 12px; align-items: end; margin-bottom: 0; padding-bottom: 16px; border-bottom: 1px solid var(--line); }
+.fold > summary::-webkit-details-marker { display: none; }
+.fold > summary > .label { grid-column: 1; }
+.fold > summary > h2 { grid-column: 1; }
+.fold > summary > .chev { grid-column: 2; grid-row: 1 / span 2; align-self: center; width: 34px; height: 34px; border: 1px solid var(--line); position: relative; }
+.fold > summary > .chev::before, .fold > summary > .chev::after { content: ""; position: absolute; left: 50%; top: 50%; width: 12px; height: 2px; background: var(--ice); transform: translate(-50%, -50%); }
+.fold > summary > .chev::after { transform: translate(-50%, -50%) rotate(90deg); transition: transform .2s; }
+.fold[open] > summary > .chev::after { transform: translate(-50%, -50%) rotate(0deg); }
+.fold > summary:hover > .chev { border-color: var(--ice); }
+.fold-body { padding-top: 18px; }
+section { padding-block: 28px 0; }
+
+/* venue */
+.big { font-size: 22px; line-height: 1.25; margin: 4px 0 0; color: var(--fg); overflow-wrap: anywhere; }
+.addr { display: grid; gap: 8px; align-content: start; }
+.creds { display: grid; gap: 16px; }
+.cred { display: grid; gap: 2px; justify-items: start; }
+.cred .hint { font-size: 13px; color: var(--muted); }
+.cred .copy { margin-top: 8px; padding: 9px 12px; font-size: 13.5px; }
+
+footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand"><span class="ring"></span>HEARTWARE</div>
+    <span class="stamp">CONFIDENTIAL</span>
+  </header>
+
+  <div class="hero">
+    <span class="boot" aria-hidden="true">&gt; halo.beta --access granted</span>
+    <h1>HALO private <em>beta</em></h1>
+    <p>Heartware is launching HALO, the companion that loves you back, and you're on the private beta list. Everyone in the room gets a secret role. Two of them are Hackers.</p>
+    <a class="btn rsvp" href="https://partiful.com/e/6yaCReYoMmNUB956I6e9" target="_blank" rel="noopener">RSVP on Partiful ↗</a>
+    <div class="notice" role="note"><span class="label">Company policy · no gifts</span><p><b>Please don't bring a gift.</b> We're heading out to bars and clubs after, so nobody wants to carry anything. You being there is the gift.</p></div>
+    <ol class="hook">
+      <li><a href="#role"><b>Are you a Hacker?</b><span>Unlock your secret role</span></a></li>
+      <li><a href="#venue"><b>Show up at 8</b><span>Gate code and directions</span></a></li>
+      <li><a href="#roles"><b>Find the Hackers</b><span>Fire one and the company wins</span></a></li>
+    </ol>
+    <div class="facts">
+      <span class="fact"><b>SAT</b> OCT 3</span>
+      <span class="fact"><b>8 PM</b> DOORS</span>
+      <span class="fact"><b>SF</b> CESAR CHAVEZ ST</span>
+      <a class="fact" href="#venue">HOW TO GET IN ↓</a>
+    </div>
+  </div>
+
+  <nav class="chips" aria-label="Sections">
+    <a href="#schedule" class="hot">Schedule</a>
+    <a href="#roles">All roles</a>
+    <a href="#role">Your secret role</a>
+    <a href="#venue">Venue</a>
+    <a href="#drinks">Drinks</a>
+    <a href="#food">Food</a>
+    <a href="#nda">NDA</a>
+    <a href="#verdict">Verdict</a><!--NAV-VERDICT-->
+    <a href="#dj">Help me DJ</a>
+    <a href="#photos">Photo wall</a>
+  </nav>
+
+  <!-- SCHEDULE -->
+  <section id="schedule">
+    <details class="fold" open>
+      <summary class="sec-head">
+      <span class="label">Launch night · run of show</span>
+      <h2>Schedule</h2>
+      <span class="chev" aria-hidden="true"></span></summary>
+      <div class="fold-body">    <ol class="tl">
+      <li><span class="t">8:00</span><div class="d"><h3>Check in</h3><p>Sign your NDA, take your Compliance Shot, and pose for your employee ID photo. No smiling. It's corporate.</p></div></li>
+      <li><span class="t">8:00–8:45</span><div class="d"><h3>Onboarding</h3><p>Mingle, eat, pour yourself a drink. Sushi comes out around 8:15.</p></div></li>
+      <li><span class="t">~8:45</span><div class="d"><h3>CEO keynote: HALO launch</h3><p>Heidi introduces HALO. Be in the room for this one.</p></div></li>
+      <li class="redact"><span class="t">???</span><div class="d"><span class="q">???</span><div class="bars" aria-label="Redacted"><span></span><span></span><span></span></div><p>This part of the schedule is classified.</p></div></li>
+      <li><span class="t">Later</span><div class="d"><h3>Dance floor</h3><p>Party mode. Want your song played? <a href="#dj">Help me DJ</a>.</p></div></li>
+    </ol>
+      </div>
+    </details>
+  </section>
+
+  <!-- ROLES -->
+  <section id="roles">
+    <details class="fold" open>
+      <summary class="sec-head">
+      <span class="label">Who's in the building</span>
+      <h2>All roles</h2>
+      <span class="chev" aria-hidden="true"></span></summary>
+      <div class="fold-body">
+      <p class="lede" style="margin-bottom:16px">Everyone gets a role. Here's every role in play and how many there are. Nobody knows who has which one.</p>
+    <div class="roles">
+      <div class="role" style="--c:var(--hacker)"><div><h3>Hacker</h3><div class="meta">×2 · bad</div></div><p>Sabotaged HALO. Know each other.<span class="win">Win if no Hacker gets fired.</span></p></div>
+      <div class="role" style="--c:var(--leaker)"><div><h3>Leaker</h3><div class="meta">×1 · bad</div></div><p>Knows who the Hackers are, but they don't know the Leaker.<span class="win">Wins if no Hacker gets fired.</span></p></div>
+      <div class="role" style="--c:var(--auditor)"><div><h3>Auditor</h3><div class="meta">×1 · good</div></div><p>Knows two names: one of them is a Hacker, the other isn't.<span class="win">Wins if a Hacker gets fired.</span></p></div>
+      <div class="role" style="--c:var(--cofounder)"><div><h3>Co-founder</h3><div class="meta">×2 · good</div></div><p>Know each other and know they're both innocent.<span class="win">Win if a Hacker gets fired.</span></p></div>
+      <div class="role" style="--c:var(--witness)"><div><h3>Witness</h3><div class="meta">Many · good</div></div><p>Each knows one person who is NOT a Hacker.<span class="win">Wins if a Hacker gets fired.</span></p></div>
+      <div class="role" style="--c:var(--lawyer)"><div><h3>Lawyer</h3><div class="meta">×4 · solo</div></div><p>Has a secret client.<span class="win">Wins if their client isn't fired.</span></p></div>
+      <div class="role" style="--c:var(--companion)"><div><h3>Companion</h3><div class="meta">×1 · in love</div></div><p>A robot that a Hacker made fall in love. Wants to get fired to protect them.<span class="win">Wins if the Companion gets fired.</span></p></div>
+      <div class="role" style="--c:var(--employee)"><div><h3>Employee</h3><div class="meta">Walk-ins · good</div></div><p>No text, no secrets.<span class="win">Wins if a Hacker gets fired.</span></p></div>
+    </div>
+    <div class="ends">
+      <span class="label">How it ends</span>
+      <p>Each team texts Heidi one suspect. Whoever's named most is fired. Fire a Hacker and the company wins.</p>
+    </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- ROLE LOOKUP -->
+  <section id="role">
+    <details class="fold" open>
+      <summary class="sec-head">
+      <span class="label">Access control · eyes only</span>
+      <h2>Are you a Hacker?</h2>
+      <span class="chev" aria-hidden="true"></span></summary>
+      <div class="fold-body">
+      <p class="lede" style="margin-bottom:16px">Somebody in this room sabotaged HALO. It might be you. Enter the access code Heidi texted you to unlock your secret role and what only you know. Cover your screen.</p>
+    <div class="panel lookup">
+      <form id="lookup-form" autocomplete="off">
+        <label class="label" for="phone" style="flex-basis:100%">Access code</label>
+        <input id="phone" name="code" type="text" autocapitalize="characters" autocorrect="off" spellcheck="false" placeholder="ABC-123" required>
+        <button class="btn" id="lookup-btn" type="submit">Reveal my role</button>
+      </form>
+      <div class="result" id="result" aria-live="polite"></div>
+    </div>
+    <p class="note">Your code stays on your phone. The page doesn't send it anywhere.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- VENUE -->
+  <section id="venue">
+    <details class="fold">
+      <summary class="sec-head">
+      <span class="label">Facility access · Heartware HQ</span>
+      <h2>Venue</h2>
+      <span class="chev" aria-hidden="true"></span></summary>
+      <div class="fold-body">
+      <p class="lede" style="margin-bottom:16px">A studio at 2200 Cesar Chavez St, between the 101 and 280 (South Potrero and Bayshore). Bandago is the front of the building.</p>
+    <div class="two">
+      <div class="panel addr">
+        <span class="label">Address</span>
+        <p class="big mono">2200 Cesar Chavez St<br>San Francisco, CA</p>
+        <div class="cta-row" style="margin-top:4px">
+          <a class="btn" href="https://www.google.com/maps/search/?api=1&amp;query=2200+Cesar+Chavez+St+San+Francisco+CA" target="_blank" rel="noopener">Open in Maps ↗</a>
+          <a class="btn ghost" href="https://www.peerspace.com/pages/listings/68d1db814d421792dfd7a458" target="_blank" rel="noopener">See the space ↗</a>
+        </div>
+      </div>
+      <div class="panel creds">
+        <div class="cred"><span class="label">Parking gate code</span><span class="big mono">#1957</span><span class="hint">Press # first</span></div>
+        <div class="cred"><span class="label">Wi-Fi</span><span class="mono">FSS Guest</span><span class="label" style="margin-top:6px">Password</span><span class="big mono">Guestwehavewif1</span><button class="btn ghost copy" type="button" data-copy="Guestwehavewif1">Copy password</button></div>
+      </div>
+    </div>
+    <div class="panel" style="margin-top:14px">
+      <h3 style="margin-bottom:14px">Getting in</h3>
+      <ol class="steps">
+        <li><span>Pull into the gated parking at Bandago and enter <b>#1957</b>. Press # first.</span></li>
+        <li><span>Park, then take the <b>second set of stairs</b> in the lot, the one with the loading ramp. Lost? Wait at the vending machines for your friends or a guide.</span></li>
+        <li><span>Inside, find the <b>cork billboard with flyers</b>. That's home base.</span></li>
+        <li><span>Go <b>right</b>, then <b>left</b> at the stairs, then <b>right</b> again.</span></li>
+        <li><span>One more <b>right</b> down a short hallway. You'll pass the single-use bathroom, across from a big mural lit by a round industrial chandelier.</span></li>
+        <li><span>At the end of that hallway, turn <b>left</b>. You'll see ladders and a black wall.</span></li>
+        <li><span>Walk to the <b>door with a mirror</b> on it and use the provided code.</span></li>
+      </ol>
+    </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- DRINKS -->
+  <section id="drinks">
+    <details class="fold">
+      <summary class="sec-head">
+      <span class="label">Refreshments · approved for beta testers</span>
+      <h2>Drinks</h2>
+      <span class="chev" aria-hidden="true"></span></summary>
+      <div class="fold-body">    <div class="two">
+      <div class="panel menu">
+        <div class="drink" style="--c:#c9ced6"><span class="dot"></span><div><h3>Compliance Shot <span class="tag glow">GLOWS</span> <span class="tag door">AT THE DOOR</span></h3><i>Mandatory upon entry.</i><span class="mono">Vodka · tonic · silver glitter</span></div></div>
+        <div class="drink" style="--c:#e0243a"><span class="dot"></span><div><h3>Kill Switch</h3><i>For when things go wrong.</i><span class="mono">Vodka · cranberry · Sprite</span></div></div>
+        <div class="drink" style="--c:#c9d4ff"><span class="dot"></span><div><h3>Hallucination <span class="tag glow">GLOWS</span></h3><i>Don't trust what you see.</i><span class="mono">Vodka · tonic · Sprite · silver glitter</span></div></div>
+        <div class="drink" style="--c:#f3a9bf"><span class="dot"></span><div><h3>Sandbox Mode <span class="tag zero">ZERO-PROOF</span></h3><i>Safe for testing.</i><span class="mono">Tonic · Sprite · cranberry · silver glitter</span></div></div>
+      </div>
+      <div class="panel">
+        <h3 style="margin-bottom:14px">Pour your own</h3>
+        <ol class="steps">
+          <li><span>Grab a cup at the bar.</span></li>
+          <li><span><b>Kill Switch or Hallucination:</b> fill the cup about a third of the way from the labeled bottle. The vodka's already in there.</span></li>
+          <li><span><b>Sandbox Mode:</b> fill it halfway from the bottle marked 0%, then add a splash of the cranberry marked 0%.</span></li>
+          <li><span>Top it off with a can of Sprite.</span></li>
+          <li><span>Give the bottle a gentle swirl first. The glitter settles.</span></li>
+        </ol>
+        <p class="warn" style="margin-top:16px">These are strong. Want it lighter? Pour less and add more Sprite. Zero-proof bottles are marked 0% and sit on their own corner of the bar.</p>
+        <p class="note">Water is at the door and the bar. Hydration is mandatory.</p>
+      </div>
+    </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- FOOD -->
+  <section id="food">
+    <details class="fold">
+      <summary class="sec-head">
+      <span class="label">Catering · appetizers, not dinner</span>
+      <h2>Food</h2>
+      <span class="chev" aria-hidden="true"></span></summary>
+      <div class="fold-body">
+      <p class="lede" style="margin-bottom:16px">Snacks are out from 8:00, and sushi comes out a little later. We're heading out after, so it's appetizers, not dinner.</p>
+    <div class="panel scroll">
+      <table style="min-width:0">
+        <thead><tr><th>On the table</th><th class="c">Vegetarian</th><th class="c">Shellfish-free</th></tr></thead>
+        <tbody>
+          <tr><td>Sushi (fish)<small>Verified data</small></td><td class="c n">No</td><td class="c y">Yes</td></tr>
+          <tr><td>Veggie spread<small>Sanitized inputs</small></td><td class="c y">Yes</td><td class="c y">Yes</td></tr>
+          <tr><td>Fruit<small>Organic hardware</small></td><td class="c y">Yes</td><td class="c y">Yes</td></tr>
+          <tr><td>Snacks<small>Circuit boards</small></td><td class="c y">Yes</td><td class="c y">Yes</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="two" style="margin-top:14px">
+      <p class="warn"><b>Vegetarian:</b> the veggie spread, fruit and snacks are all yours.</p>
+      <p class="warn"><b>Shellfish allergy:</b> nothing at the party has shellfish. If trace cross-contact matters to you, text Heidi.</p>
+    </div>
+    <p class="note">Any other allergy? Text Heidi before the party.</p>
+      </div>
+    </details>
+  </section>
+
+  <!-- NDA -->
+  <section id="nda">
+    <details class="fold">
+      <summary class="sec-head">
+      <span class="label">Required before entry</span>
+      <h2>NDA</h2>
+      <span class="chev" aria-hidden="true"></span></summary>
+      <div class="fold-body">
+      <p class="lede" style="margin-bottom:16px">You'll sign a printed copy at the door. Read it now if you want your lawyer to go over it first.</p>
+    <div class="viewer">
+      <div class="viewer-bar">
+        <span class="doc-ico" aria-hidden="true">PDF</span>
+        <div class="doc-meta"><b>Heartware_Beta_Tester_NDA.pdf</b><span>Form HW-NDA-1003 · 1 page · 172 KB</span></div>
+        <button class="btn" type="button" id="nda-dl">Download PDF</button>
+      </div>
+      <div class="viewer-stage">
+        <img class="sheet" src="nda-share.png?v=2" alt="Heartware Beta Tester NDA: confidentiality, monitoring, the Compliance Shot, emotional attachment, instructions, incidents, termination and survival clauses, with a signature line." width="1632" height="2112">
+      </div>
+      <div class="viewer-foot"><span>Page 1 of 1</span><span id="nda-status">Pinch to zoom</span></div>
+    </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- VERDICT -->
+  <!--VERDICT-START-->
+  <section id="verdict">
+    <details class="fold">
+      <summary class="sec-head">
+      <span class="label">Board vote · live</span>
+      <h2>Verdict</h2>
+      <span class="chev" aria-hidden="true"></span></summary>
+      <div class="fold-body">
+      <p class="lede" style="margin-bottom:16px">Voting opens at 9:15. Each team gets one vote: text Heidi your suspect and why. First vote counts. Every vote shows up here the moment it's locked in.</p>
+    <div id="verdict-body"></div>
+    <div class="host" id="host" hidden>
+      <span class="label">Host only · type each team's vote, then lock it in</span>
+      <datalist id="guest-names"></datalist>
+      <div id="host-rows"></div>
+      <div class="cta-row" style="margin-top:0">
+        <button class="btn" type="button" id="close-vote">Close voting</button>
+        <button class="btn warn-btn" type="button" id="reset">Reset all votes</button>
+      </div>
+      <p class="msg" id="host-msg"></p>
+    </div>
+      </div>
+    </details>
+  </section>
+
+  <!--VERDICT-END-->
+
+  <!-- HELP ME DJ -->
+  <section id="dj">
+    <details class="fold">
+      <summary class="sec-head">
+      <span class="label">Audio department</span>
+      <h2>Help me DJ</h2>
+      <span class="chev" aria-hidden="true"></span></summary>
+      <div class="fold-body">
+      <p class="lede" style="margin-bottom:16px">Add the songs you want on the dance floor. They go straight into the party playlist on Spotify.</p>
+    <div class="panel">
+      <div class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+      <ol class="steps">
+        <li><span>Tap <b>Add songs on Spotify</b> below. It opens the playlist in your Spotify app.</span></li>
+        <li><span>Tap <b>Join</b> or <b>Add to this playlist</b> if Spotify asks.</span></li>
+        <li><span>Search for your song and add it. Dance-floor bangers only, please.</span></li>
+      </ol>
+      <div class="cta-row" id="dj-cta"></div>
+      <form class="search" id="song-form">
+        <input id="song" type="text" placeholder="Song or artist" aria-label="Song or artist">
+        <button class="btn ghost" type="submit">Find it on Spotify</button>
+      </form>
+      <p class="note">Free Spotify accounts work.</p>
+    </div>
+      </div>
+    </details>
+  </section>
+
+  <!-- PHOTO WALL -->
+  <section id="photos">
+    <details class="fold">
+      <summary class="sec-head">
+      <span class="label">Surveillance footage</span>
+      <h2>Photo wall</h2>
+      <span class="chev" aria-hidden="true"></span></summary>
+      <div class="fold-body">
+      <p class="lede" style="margin-bottom:16px">All activity in this building is monitored. Help HALO out: drop your photos from the night in the shared album.</p>
+    <div class="panel">
+      <div class="film" aria-hidden="true"><span>CAM 01</span><span>CAM 02</span><span>CAM 03</span></div>
+      <div class="cta-row" id="photo-cta" style="margin-top:0"></div>
+      <p class="note" id="photo-note"></p>
+    </div>
+      </div>
+    </details>
+  </section>
+
+  <footer>
+    <span>HALO private beta · Oct 3</span>
+    <span>Do not forward</span>
+  </footer>
+</div>
+
+<script>
+/* ---- Host config (filled by build.mjs) ---- */
+const CONFIG = /*CONFIG*/{"djInviteUrl":"","playlistUrl":"https://open.spotify.com/playlist/7c6dzkeC723CXOcABw5eyY","photoUrl":"https://partiful.com/e/6yaCReYoMmNUB956I6e9","photoLabel":"Open the Partiful album","live":false}/*END*/;
+/* ---- Encrypted roster: each entry only opens with the guest's private access code ---- */
+/* ---- Board vote results (published from the host panel) ---- */
+const GUESTS = /*GUESTS*/[]/*END*/;
+const RESULTS = /*RESULTS*/{"teams":[],"closed":false}/*END*/;
+const ROSTER = /*ROSTER*/{"v":1,"iter":600000,"salt":"","entries":{}}/*END*/;
+
+const ROLES = {
+  hacker:    { name: "Hacker", color: "var(--hacker)", tag: "Secret · bad guy",
+               text: "You and your fellow Hacker secretly prompt-injected HALO. Something is going to go wrong at the launch. When it does, it was you. Blend in, protect each other, lie.",
+               win: "No Hacker gets fired." },
+  leaker:    { name: "Leaker", color: "var(--leaker)", tag: "Secret · bad guy",
+               text: "You know who the Hackers are, but they don't know about you. Cover for them, spread rumors, point fingers anywhere else.",
+               win: "No Hacker gets fired." },
+  auditor:   { name: "Auditor", color: "var(--auditor)", tag: "Secret · good guy",
+               text: "You found something in the logs: one of two names is a Hacker, the other isn't. Decide who to trust with that.",
+               win: "A Hacker gets fired." },
+  cofounder: { name: "Co-founder", color: "var(--cofounder)", tag: "Secret · good guy",
+               text: "You and the other Co-founder know you're both innocent. Vouch for each other and lead the hunt.",
+               win: "A Hacker gets fired." },
+  companion: { name: "Companion", color: "var(--companion)", tag: "Secret · in love",
+               text: "You're a HALO companion robot. A Hacker reprogrammed you to fall in love with them. Protect your Hacker at all costs. Act as suspicious as you can and get yourself fired instead of them.",
+               win: "The Companion gets fired." },
+  lawyer:    { name: "Lawyer", color: "var(--lawyer)", tag: "Secret · solo",
+               text: "You have a secret client. You don't know their role, and it doesn't matter. Keep them from getting fired.",
+               win: "Your client isn't fired." },
+  witness:   { name: "Witness", color: "var(--witness)", tag: "Secret · good guy",
+               text: "You saw something. You know for sure that one person is not a Hacker. Trade it, vouch for them, or keep it up your sleeve.",
+               win: "A Hacker gets fired." },
+  employee:  { name: "Employee", color: "var(--employee)", tag: "Good guy",
+               text: "No secrets, pure instinct. Talk to everyone and figure out who's lying.",
+               win: "A Hacker gets fired." },
+};
+ROLES.intern = ROLES.halo = ROLES.companion;
+
+const $ = (id) => document.getElementById(id);
+const b64 = (s) => Uint8Array.from(atob(s), (c) => c.charCodeAt(0));
+const hex = (u8) => Array.from(u8, (b) => b.toString(16).padStart(2, "0")).join("");
+
+function normalizeCode(raw) {
+  return String(raw).toUpperCase().replace(/[^A-Z0-9]/g, "");
+}
+
+async function unlock(code) {
+  const enc = new TextEncoder();
+  const base = await crypto.subtle.importKey("raw", enc.encode(code), "PBKDF2", false, ["deriveBits"]);
+  const bits = new Uint8Array(await crypto.subtle.deriveBits(
+    { name: "PBKDF2", hash: "SHA-256", salt: b64(ROSTER.salt), iterations: ROSTER.iter }, base, 512));
+  const id = hex(bits.slice(32, 48));
+  const blob = ROSTER.entries[id];
+  if (!blob) return null;
+  const raw = b64(blob);
+  const key = await crypto.subtle.importKey("raw", bits.slice(0, 32), "AES-GCM", false, ["decrypt"]);
+  const plain = await crypto.subtle.decrypt({ name: "AES-GCM", iv: raw.slice(0, 12) }, key, raw.slice(12));
+  return JSON.parse(new TextDecoder().decode(plain));
+}
+
+function el(tag, attrs = {}, ...kids) {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(attrs)) {
+    if (k === "style") n.style.cssText = v; else if (k === "class") n.className = v; else n.setAttribute(k, v);
+  }
+  for (const k of kids) if (k != null) n.append(k);
+  return n;
+}
+
+function showMessage(kind, text) {
+  $("result").replaceChildren(el("div", { class: "verdict " + kind }, text));
+}
+
+function showRole(g) {
+  const base = ROLES[g.role] || ROLES.employee;
+  // Witnesses see their private job title; the public role list still just says Witness.
+  const r = g.title ? { ...base, name: g.title, tag: "Witness · good guy",
+    text: (g.flavor ? g.flavor + " " : "") + "You know for sure that one person is not a Hacker. Trade it, vouch for them, or keep it up your sleeve." } : base;
+  const box = el("div", { class: "role-hit", style: "color:" + r.color },
+    el("span", { class: "who" }, "Access granted · " + (g.name || "beta tester")),
+    el("span", { class: "name" }, r.name),
+    g.line ? el("div", { class: "secret" }, el("span", { class: "label" }, "What only you know"), el("p", {}, g.line)) : null,
+    el("div", { class: "card-hit" },
+      el("span", { class: "tagline" }, el("b", {}, r.tag)),
+      el("p", {}, r.text),
+      el("div", { class: "how" }, el("span", { class: "label" }, "How you win"), el("p", {}, r.win))),
+    el("ul", { class: "todo" },
+      el("li", {}, "Keep this to yourself. Don't show your screen."),
+      el("li", {}, "Re-read it before the party. You'll get your team on the night."),
+      el("li", {}, "Didn't expect this role? Text Heidi."))
+  );
+  $("result").replaceChildren(box);
+}
+
+$("lookup-form").addEventListener("submit", async (e) => {
+  e.preventDefault();
+  const code = normalizeCode($("phone").value);
+  if (code.length < 6) { showMessage("bad", "Access codes are 6 characters, like ABC-123. Check Heidi's text and try again."); return; }
+  if (!CONFIG.live || !ROSTER.salt) { showMessage("wait", "Roles haven't been assigned yet. Check back Friday."); return; }
+  const btn = $("lookup-btn");
+  btn.disabled = true; btn.textContent = "Verifying…";
+  showMessage("wait", "> scanning employee records…");
+  try {
+    const g = await unlock(code);
+    if (g) showRole(g);
+    else showMessage("bad", "That code didn't match anyone. No code yet? Heidi might not have your number. Text her at (510) 206-5318.");
+  } catch (err) {
+    showMessage("bad", "Something went wrong reading your record. Text Heidi at (510) 206-5318.");
+  } finally {
+    btn.disabled = false; btn.textContent = "Reveal my role";
+  }
+});
+
+/* DJ links */
+(function () {
+  const row = $("dj-cta");
+  if (CONFIG.djInviteUrl) {
+    row.append(el("a", { class: "btn", href: CONFIG.djInviteUrl, target: "_blank", rel: "noopener" }, "Add songs on Spotify ↗"));
+  } else {
+    row.append(el("span", { class: "pending" }, "Song adding opens soon. Check back before the party."));
+  }
+  row.append(el("a", { class: "btn ghost", href: CONFIG.playlistUrl, target: "_blank", rel: "noopener" }, "Hear the playlist ↗"));
+  $("song-form").addEventListener("submit", (e) => {
+    e.preventDefault();
+    const q = $("song").value.trim();
+    if (!q) return;
+    const a = el("a", { href: "https://open.spotify.com/search/" + encodeURIComponent(q), target: "_blank", rel: "noopener" });
+    document.body.append(a); a.click(); a.remove();
+  });
+})();
+
+/* NDA download: the save dialog where the viewer supports it, else open the PDF in a new tab */
+(function () {
+  const btn = $("nda-dl"), status = $("nda-status");
+  const openPdf = () => { const a = el("a", { href: "nda.pdf?v=2", target: "_blank", rel: "noopener" }); if (!window.claude) a.setAttribute("download", "Heartware_Beta_Tester_NDA.pdf"); document.body.append(a); a.click(); a.remove(); };
+  btn.addEventListener("click", async () => {
+    const dl = window.claude?.use ? await claude.use("downloads") : null;
+    if (!dl) { openPdf(); return; }
+    btn.disabled = true;
+    try {
+      const res = await fetch("nda.pdf?v=2");
+      if (!res.ok) throw new Error(String(res.status));
+      await dl.save({ filename: "Heartware_Beta_Tester_NDA.pdf", data: await res.blob() });
+      status.textContent = "Saved";
+    } catch (e) {
+      if (e && e.code === "declined") status.textContent = "Download canceled";
+      else openPdf();
+    } finally { btn.disabled = false; }
+  });
+})();
+
+/* Photo wall link */
+(function () {
+  $("photo-cta").append(el("a", { class: "btn", href: CONFIG.photoUrl, target: "_blank", rel: "noopener" }, CONFIG.photoLabel + " ↗"));
+  $("photo-note").textContent = CONFIG.photoNote || "Open the event on Partiful and add your photos to its album. Everyone at the party can see them.";
+})();
+
+/* ---- Verdict ---- */
+const setMode = () => document.documentElement.classList.toggle("tally-mode", location.hash === "#tally");
+setMode(); window.addEventListener("hashchange", setMode);
+const TEAMS = [1, 2, 3, 4, 5];
+const keyOf = (n) => n.trim().toLowerCase().replace(/\s+/g, " ");
+
+function tallyOf(teams) {
+  const counts = new Map();
+  for (const t of teams) {
+    if (!t.suspect) continue;
+    const k = keyOf(t.suspect);
+    const c = counts.get(k) || { name: t.suspect.trim(), n: 0 };
+    c.n++; counts.set(k, c);
+  }
+  return [...counts.values()].sort((a, b) => b.n - a.n);
+}
+
+function renderVerdict() {
+  if (!$("verdict-body")) return;
+  const locked = RESULTS.teams || [];
+  const done = RESULTS.closed || locked.length >= TEAMS.length;
+  let seen = null;
+  try { seen = JSON.parse(sessionStorage.getItem("hw-seen") || "null"); } catch (e) {}
+  const slots = el("div", { class: "slots" });
+  for (const n of TEAMS) {
+    const t = locked.find((x) => x.team === n);
+    if (t) {
+      const fresh = Array.isArray(seen) && !seen.includes(n);
+      slots.append(el("div", { class: "slot" + (fresh ? " new" : "") },
+        el("span", { class: "tn" }, "TEAM " + n),
+        el("div", {}, el("div", { class: "sus" }, t.suspect), t.why ? el("p", { class: "why" }, "“" + t.why + "”") : null)));
+    } else {
+      slots.append(el("div", { class: "slot sealed" },
+        el("span", { class: "tn" }, "TEAM " + n),
+        el("div", {}, el("div", { class: "sus" }, done ? "NO VOTE" : "WAITING"), done ? null : el("div", { class: "bars" }, el("span"), el("span")))));
+    }
+  }
+  try { sessionStorage.setItem("hw-seen", JSON.stringify(locked.map((t) => t.team))); } catch (e) {}
+  const body = $("verdict-body");
+  body.replaceChildren(slots);
+
+  const tally = tallyOf(locked);
+  const max = tally.length ? tally[0].n : 0;
+  if (tally.length) {
+    const box = el("div", { class: "tally" });
+    for (const c of tally) {
+      box.append(el("div", { class: "bar" + (c.n === max && max >= 2 ? " lead" : "") },
+        el("span", { class: "nm" }, c.name),
+        el("span", { class: "track" }, el("span", { class: "fill", style: "display:block;width:" + (c.n / TEAMS.length * 100) + "%" })),
+        el("span", { class: "ct" }, String(c.n))));
+    }
+    body.append(box);
+  }
+  if (done) {
+    const fired = tally.filter((c) => c.n === max && max >= 2).map((c) => c.name);
+    body.append(fired.length
+      ? el("div", { class: "fired" }, el("span", { class: "label" }, "Terminated by the board"), ...fired.map((f) => el("div", { class: "who" }, f)), el("p", {}, "Now let's find out who they really were."))
+      : el("div", { class: "fired" }, el("span", { class: "label" }, "No majority"), el("div", { class: "who" }, "Nobody fired"), el("p", {}, "No one was named by two or more teams.")));
+  } else if (!locked.length) {
+    body.append(el("p", { class: "note" }, "No votes yet. They appear here live as teams lock in."));
+  }
+}
+renderVerdict();
+
+/* Host panel: only the page owner sees it. Locking a vote republishes the page for everyone. */
+(async function () {
+  if (!window.claude?.use) return;
+  const user = await claude.use("user");
+  if (!user || !(await user.isOwner()) || location.hash === "#tally") return;
+  const art = await claude.use("artifact");
+  if (!art) return;
+  const list = $("guest-names");
+  GUESTS.forEach((g) => list.append(el("option", { value: g })));
+  const locked = RESULTS.teams || [];
+  const rows = $("host-rows");
+  rows.style.cssText = "display:grid;gap:8px";
+  const msg = (t) => { $("host-msg").textContent = t; };
+  for (const n of TEAMS) {
+    const t = locked.find((x) => x.team === n);
+    const sus = el("input", { id: "sus-" + n, placeholder: "Suspect", list: "guest-names", value: t ? t.suspect : "" });
+    const why = el("input", { id: "why-" + n, placeholder: "Why (optional)", value: t ? t.why : "" });
+    const btn = el("button", { class: "btn", type: "button", id: "lock-" + n, style: "padding:10px 12px" }, t ? "Locked" : "Lock in");
+    if (t || RESULTS.closed) { sus.disabled = true; why.disabled = true; btn.disabled = true; }
+    btn.addEventListener("click", () => {
+      const suspect = sus.value.trim();
+      if (!suspect) { msg("Type team " + n + "'s suspect first."); return; }
+      publishResults({ teams: [...locked, { team: n, suspect, why: why.value.trim() }].sort((a, b) => a.team - b.team), closed: false });
+    });
+    rows.append(el("div", { class: "host-row" }, el("span", {}, "TEAM " + n), sus, why, btn));
+  }
+  $("host").hidden = false;
+
+  const SKELETON = '<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>\n';
+  let busy = false;
+  async function publishResults(next) {
+    if (busy) return;
+    busy = true; msg("Publishing…");
+    try {
+      const res = await fetch("tpl.txt", { cache: "no-store" });
+      if (!res.ok) throw new Error(String(res.status));
+      const tpl = await res.text();
+      const page = tpl.replace(/\/\*RESULTS\*\/[\s\S]*?\/\*END\*\//, () => "/*RESULTS*/" + JSON.stringify(next).replace(/</g, "\\u003c") + "/*END*/");
+      await art.publish(SKELETON + page + "</body></html>");
+      msg("Live for everyone.");
+    } catch (e) {
+      if (e && e.code === "conflict") msg("The page just updated. Try again.");
+      else if (e && e.code === "rate_limited") msg("Too fast. Wait a few seconds and tap again.");
+      else if (e && e.code) msg("Couldn't publish (" + e.code + ").");
+      else msg("Couldn't load the page template. Ask Claude to check the site.");
+    } finally { busy = false; }
+  }
+  $("close-vote").addEventListener("click", () => publishResults({ teams: locked, closed: true }));
+  if (RESULTS.closed || locked.length >= TEAMS.length) $("close-vote").disabled = true;
+  let armed = false;
+  $("reset").addEventListener("click", () => {
+    if (!armed) { armed = true; $("reset").textContent = "Tap again to clear"; setTimeout(() => { armed = false; $("reset").textContent = "Reset all votes"; }, 4000); return; }
+    publishResults({ teams: [], closed: false });
+  });
+})();
+
+/* Open a collapsed section when someone jumps to it */
+function openSection(hash) {
+  const id = (hash || "").slice(1);
+  const sec = id === "tally" ? $("verdict") : id && document.getElementById(id);
+  const d = sec && sec.querySelector("details.fold");
+  if (d) d.open = true;
+}
+openSection(location.hash);
+window.addEventListener("hashchange", () => openSection(location.hash));
+document.addEventListener("click", (e) => {
+  const a = e.target.closest('a[href^="#"]');
+  if (a) openSection(a.getAttribute("href"));
+});
+document.querySelectorAll(".copy").forEach((b) => b.addEventListener("click", async () => {
+  const label = b.textContent;
+  try { await navigator.clipboard.writeText(b.dataset.copy); b.textContent = "Copied"; }
+  catch (e) { b.textContent = b.dataset.copy; }
+  setTimeout(() => { b.textContent = label; }, 1800);
+}));
+
+/* Highlight the chip for the section in view */
+(function () {
+  const links = [...document.querySelectorAll("nav.chips a")];
+  const obs = new IntersectionObserver((ents) => {
+    ents.forEach((en) => {
+      if (!en.isIntersecting) return;
+      links.forEach((l) => l.classList.toggle("hot", l.getAttribute("href") === "#" + en.target.id));
+    });
+  }, { rootMargin: "-40% 0px -55% 0px" });
+  document.querySelectorAll("section[id]").forEach((s) => obs.observe(s));
+})();
+</script>

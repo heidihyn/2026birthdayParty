@@ -1,0 +1,7 @@
+# Guest phone numbers stay out of git
+/guest-roles.csv
+# Claude-artifact build outputs and bundles
+/index.html
+/tpl.txt
+/heartware-site.zip
+/dm-lines.md

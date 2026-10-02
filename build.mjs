@@ -62,7 +62,7 @@ function secretFor(g) {
   const r = g.role.toLowerCase();
   if (r === "hacker a") return { role: "hacker", line: hackerB ? `Your fellow Hacker is ${hackerB}. Keep this secret. 😈` : "You're the only Hacker tonight. Keep this secret. 😈" };
   if (r === "hacker b") return { role: "hacker", line: hackerA ? `Your fellow Hacker is ${hackerA}. Keep this secret. 😈` : "You're the only Hacker tonight. Keep this secret. 😈" };
-  if (r === "leaker") return { role: "leaker", line: `The Hackers are ${[hackerA, hackerB].filter(Boolean).join(" and ")}. The Hackers don't know you're the Leaker.` };
+  if (r === "leaker") return { role: "leaker", line: `The Hackers are ${[hackerA, hackerB].filter(Boolean).join(" and ")}. But the Hackers don't know who the Leaker is.` };
   if (r === "auditor") { const pair = [intern, hackerA].filter(Boolean); /* fixed order so rebuilds keep DMs and site in sync */ return { role: "auditor", line: `One of these two is a Hacker: ${pair.join(" or ")}.` }; }
   if (r === "co-founder" || r === "cofounder") { const other = byRole("Co-founder").concat(byRole("Cofounder")).find((x) => x !== g); return { role: "cofounder", line: other ? `Your co-founder is ${other.name}. You're both innocent.` : "You're the only co-founder tonight. You're innocent." }; }
   if (r === "companion" || r === "halo" || r === "intern") return { role: "companion", line: hackerA ? `You were programmed to love ${hackerA}. 💘 They don't know it's you.` : "" };

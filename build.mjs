@@ -119,7 +119,7 @@ const standaloneVerdict = `  <section id="verdict">
     </details>
   </section>
 `;
-const standalone = "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1,viewport-fit=cover\">\n<meta name=\"description\" content=\"HALO private beta · Sat Oct 3 · San Francisco\">\n<meta property=\"og:title\" content=\"HALO Private Beta · Heartware\">\n<meta property=\"og:description\" content=\"You've been selected to test HALO, the companion that loves you back. Sat Oct 3, SF.\">\n<title>Heartware Beta Portal</title>\n</head>\n<body>\n"
+const standalone = "<!doctype html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<meta name=\"viewport\" content=\"width=device-width,initial-scale=1,viewport-fit=cover\">\n<meta name=\"description\" content=\"HALO private beta · Sat Oct 3 · San Francisco\">\n<meta property=\"og:title\" content=\"HALO Private Beta · Heartware\">\n<meta property=\"og:description\" content=\"You've been selected to test HALO, the companion that loves you back. Sat Oct 3, SF.\">\n<meta property=\"og:type\" content=\"website\">\n<meta property=\"og:url\" content=\"https://heidihyn.github.io/2026birthdayParty/\">\n<meta property=\"og:image\" content=\"https://heidihyn.github.io/2026birthdayParty/og-image.png\">\n<meta property=\"og:image:width\" content=\"1200\">\n<meta property=\"og:image:height\" content=\"630\">\n<meta name=\"twitter:card\" content=\"summary_large_image\">\n<meta name=\"twitter:image\" content=\"https://heidihyn.github.io/2026birthdayParty/og-image.png\">\n<title>Heartware Beta Portal</title>\n</head>\n<body>\n"
   + out.replace(/<title>[^<]*<\/title>\n?/, "").replace(/<!--VERDICT-START-->[\s\S]*?<!--VERDICT-END-->/, standaloneVerdict)
   + "\n</body>\n</html>\n";
 mkdirSync("standalone", { recursive: true });
@@ -130,6 +130,6 @@ const slug = (t) => t.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g
 const card = (g, s) => s.title ? `witness/role-witness-${slug(s.title)}.png` : `role-${s.role}.png`;
 const dm = guests.map((g) => { const s = secrets.get(g); return `| ${g.name} | ${g.phone || "no number: they text you"} | ${g.code} | ${g.team} | ${s.title || g.role} | ${card(g, s)} | ${s.line} |`; });
 writeFileSync("dm-lines.md", "# Friday DMs (private: has phone numbers)\n\nSend each guest their card from printables/phone-cards/, the line, and their access code (they enter it at heidihyn.github.io/2026birthdayParty to re-read their role).\n\n| Name | Phone | Code | Team | Role | Card | Line |\n|---|---|---|---|---|---|---|\n" + dm.join("\n") + "\n");
-for (const f of ["nda.pdf", "nda-share.png"]) copyFileSync(f, "standalone/" + f);
+for (const f of ["nda.pdf", "nda-share.png", "og-image.png"]) copyFileSync(f, "standalone/" + f);
 console.log(`Built with ${guests.length} guests.`);
 if (problems.length) console.log("Check these:\n- " + problems.join("\n- "));

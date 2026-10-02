@@ -349,7 +349,7 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
     </div>
     <div class="ends">
       <span class="label">How it ends</span>
-      <p>Each team texts Heidi one suspect. Whoever's named most is fired. Fire a Hacker and the company wins.</p>
+      <p>On the night, everyone is put into one of 5 small teams. A team is just a group to hunt with, not a side: each one mixes good guys, bad guys and lawyers. Each team texts Heidi one suspect. Whoever's named most is fired. Fire a Hacker and the company wins.</p>
     </div>
       </div>
     </details>
@@ -509,7 +509,7 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
       <h2>Verdict</h2>
       <span class="chev" aria-hidden="true"></span></summary>
       <div class="fold-body">
-      <p class="lede" style="margin-bottom:16px">Voting opens at 9:15. Each team gets one vote: text Heidi your suspect and why. First vote counts. Every vote shows up here the moment it's locked in.</p>
+      <p class="lede" style="margin-bottom:16px">Voting opens at 9:15. Your team is the small group you're put in on the night, not your role's side. Each team gets one vote: text Heidi your suspect and why. First vote counts. Every vote shows up here the moment it's locked in.</p>
     <div id="verdict-body"></div>
     <div class="host" id="host" hidden>
       <span class="label">Host only · type each team's vote, then lock it in</span>
@@ -665,7 +665,7 @@ function showRole(g) {
       el("div", { class: "how" }, el("span", { class: "label" }, "How you win"), el("p", {}, r.win))),
     el("ul", { class: "todo" },
       el("li", {}, "Keep this to yourself. Don't show your screen."),
-      el("li", {}, "Re-read it before the party. You'll get your team on the night."),
+      el("li", {}, "Re-read it before the party. On the night you'll join a small team of mixed roles to hunt with."),
       el("li", {}, "Didn't expect this role? Text Heidi."))
   );
   $("result").replaceChildren(box);

@@ -115,7 +115,7 @@ const standaloneVerdict = `  <section id="verdict">
       <span class="label">Board vote · live</span>
       <h2>Verdict</h2>
       <span class="chev" aria-hidden="true"></span></summary>
-      <div class="fold-body"><p class="lede">Voting opens at 9:15. Each team gets one vote: text Heidi your suspect and why. First vote counts. Watch the results come in live on the big screen.</p></div>
+      <div class="fold-body"><p class="lede">Voting opens at 9:15. Your team is the small group you're put in on the night, not your role's side. Each team gets one vote: text Heidi your suspect and why. First vote counts. Watch the results come in live on the big screen.</p></div>
     </details>
   </section>
 `;

@@ -21,5 +21,7 @@ Every Witness gets one unique Heartware job title. The title is flavor only: the
 | 13 | Angel Investor | `printables/phone-cards/witness/role-witness-angel-investor.png` | Your money is on the line, so you pay attention. |
 | 14 | Product Manager | `printables/phone-cards/witness/role-witness-product-manager.png` | You were in every meeting. Every single one. |
 | 15 | Office DJ | `printables/phone-cards/witness/role-witness-office-dj.png` | From the booth, you see the whole floor. |
+| 16 | Recruiter | `printables/phone-cards/witness/role-witness-recruiter.png` | You hired half this room. You know who lied on their résumé. |
+| 17 | Office Chef | `printables/phone-cards/witness/role-witness-office-chef.png` | You feed everyone. Full people talk. |
 
-With fewer than 15 Witnesses, skip titles from the bottom of the list. Walk-ins stay Employees (no title).
+With fewer than 17 Witnesses, skip titles from the bottom of the list. Walk-ins stay Employees (no title).

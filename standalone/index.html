@@ -286,6 +286,27 @@ section { padding-block: 28px 0; }
 .cred .hint { font-size: 13px; color: var(--muted); }
 .cred .copy { margin-top: 8px; padding: 9px 12px; font-size: 13.5px; }
 
+/* feedback (post-party) */
+.fb-banner { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; border: 1px solid var(--ice); background: rgba(111,211,255,.07); padding: 14px 16px; margin-top: 18px; }
+.fb-banner p { margin: 0; font-size: 15.5px; }
+.fb-intro { margin: 0 0 18px; color: var(--fg); }
+.fb-intro small { display: block; margin-top: 6px; color: var(--muted); font-size: 14px; }
+.fb { display: grid; gap: 22px; }
+.fb fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; min-width: 0; }
+.fb legend, .fb .fb-q { font-family: var(--body); color: var(--fg); letter-spacing: 0; text-transform: none; font-weight: 600; font-size: 16.5px; line-height: 1.35; padding: 0; margin-bottom: 8px; }
+.fb .fb-q small, .fb legend small { display: block; font-weight: 400; color: var(--muted); font-size: 14px; margin-top: 2px; }
+.fb textarea { width: 100%; min-height: 84px; resize: vertical; font: 16px/1.45 var(--body); color: var(--fg); background: #05070a; border: 1px solid #2a3544; padding: 12px; }
+.fb textarea:focus, .fb .opts input:focus-visible + span { outline: 2px solid var(--ice); outline-offset: 1px; }
+.fb .opts { display: flex; gap: 8px; flex-wrap: wrap; }
+.fb .opts label { position: relative; }
+.fb .opts input { position: absolute; opacity: 0; inset: 0; }
+.fb .opts span { display: inline-block; padding: 11px 16px; border: 1px solid #2a3544; cursor: pointer; font-size: 15px; }
+.fb .opts input:checked + span { border-color: var(--ice); color: var(--ice); background: rgba(111,211,255,.08); }
+.fb .send { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.fb .send small { color: var(--muted); font-size: 13.5px; }
+.fb-done { border: 1px solid var(--ok); background: rgba(62,224,143,.07); padding: 16px; }
+.fb-done p { margin: 0; }
+
 footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
 </style>
 
@@ -301,6 +322,7 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
     <p>Heartware is launching HALO, the companion that loves you back, and you're on the private beta list. Everyone in the room gets a secret role. Two of them are Hackers.</p>
     <a class="btn rsvp" href="https://partiful.com/e/6yaCReYoMmNUB956I6e9" target="_blank" rel="noopener">RSVP on Partiful ↗</a>
     <div class="notice" role="note"><span class="label">Company policy · no gifts</span><p><b>Please don't bring a gift.</b> We're heading out to bars and clubs after, so nobody wants to carry anything. You being there is the gift.</p></div>
+    <div class="fb-banner"><p><b>Thank you for coming.</b> Got 2 minutes? Tell me how it really went.</p><a class="btn" href="#feedback">Give feedback</a></div>
     <ol class="hook">
       <li><a href="#role"><b>Are you a Hacker?</b><span>Unlock your secret role</span></a></li>
       <li><a href="#venue"><b>Show up at 8</b><span>Gate code and directions</span></a></li>
@@ -315,7 +337,8 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
   </div>
 
   <nav class="chips" aria-label="Sections">
-    <a href="#schedule" class="hot">Schedule</a>
+    <a href="#feedback" class="hot">Feedback</a>
+    <a href="#schedule">Schedule</a>
     <a href="#roles">All roles</a>
     <a href="#role">Your secret role</a>
     <a href="#venue">Venue</a>
@@ -326,6 +349,48 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
     <a href="#dj">Help me DJ</a>
     <a href="#photos">Photo wall</a>
   </nav>
+
+  <!-- FEEDBACK (post-party) -->
+  <section id="feedback">
+    <details class="fold" open>
+      <summary class="sec-head">
+      <span class="label">Anonymous · 2 minutes</span>
+      <h2>How was it, honestly?</h2>
+      <span class="chev" aria-hidden="true"></span></summary>
+      <div class="fold-body">
+      <p class="fb-intro">I want to make the next one better, and the useful stuff is what didn't work. There's no name or code on this, so I can't tell who wrote what. Skip anything you want. Short answers are perfect.</p>
+      <form class="fb" id="fb-form">
+        <fieldset>
+          <legend>Did the game make it easier to talk to people you didn't already know?</legend>
+          <div class="opts">
+            <label><input type="radio" name="talk_to_new_people" value="Yes"><span>Yes</span></label>
+            <label><input type="radio" name="talk_to_new_people" value="Somewhat"><span>Somewhat</span></label>
+            <label><input type="radio" name="talk_to_new_people" value="No"><span>No</span></label>
+          </div>
+          <textarea name="talk_why" aria-label="Why? (optional)" placeholder="Why? (optional)" style="min-height:60px"></textarea>
+        </fieldset>
+        <fieldset>
+          <label class="fb-q" for="fb-lost">Was there a moment you felt lost, bored, awkward, or unsure what you were supposed to do?<small>What was going on at the time?</small></label>
+          <textarea id="fb-lost" name="lost_or_awkward"></textarea>
+        </fieldset>
+        <fieldset>
+          <label class="fb-q" for="fb-change">If you were throwing the next one, what would you change or cut?</label>
+          <textarea id="fb-change" name="change_or_cut"></textarea>
+        </fieldset>
+        <fieldset>
+          <label class="fb-q" for="fb-keep">What's one thing that's worth keeping?</label>
+          <textarea id="fb-keep" name="keep" style="min-height:60px"></textarea>
+        </fieldset>
+        <fieldset>
+          <label class="fb-q" for="fb-else">Anything else?</label>
+          <textarea id="fb-else" name="anything_else" style="min-height:60px"></textarea>
+        </fieldset>
+        <div class="send"><button class="btn" type="submit" id="fb-send">Send anonymously</button><small id="fb-msg">Even one answer helps.</small></div>
+      </form>
+      <div class="fb-done" id="fb-done" hidden><p><b>Got it. Thank you.</b> I'll read every word.</p></div>
+      </div>
+    </details>
+  </section>
 
   <!-- SCHEDULE -->
   <section id="schedule">
@@ -581,13 +646,34 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
 </div>
 
 <script>
+/* Feedback form: anonymous. Sends only the answers (no name, code or role) to FEEDBACK_URL. */
+(() => {
+  const FEEDBACK_URL = "https://formsubmit.co/ajax/heidihyn107@gmail.com";
+  const form = document.getElementById("fb-form"); if (!form) return;
+  const msg = document.getElementById("fb-msg"), btn = document.getElementById("fb-send");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries([...new FormData(form)].filter(([, v]) => String(v).trim()));
+    if (!Object.keys(data).length) { msg.textContent = "Answer at least one, even a word."; return; }
+    btn.disabled = true; msg.textContent = "Sending…";
+    try {
+      const r = await fetch(FEEDBACK_URL, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ _subject: "Party feedback (anonymous)", _template: "box", _captcha: "false", ...data }) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || String(j.success) === "false") throw new Error(j.message || r.status);
+      form.hidden = true; document.getElementById("fb-done").hidden = false;
+    } catch { btn.disabled = false; msg.textContent = "That didn't send. Try again in a moment."; }
+  });
+})();
+</script>
+<script>
 /* ---- Host config (filled by build.mjs) ---- */
 const CONFIG = /*CONFIG*/{"djInviteUrl":"https://open.spotify.com/playlist/7c6dzkeC723CXOcABw5eyY?si=26TGYzdnQS2H8GAlwweH_A&utm_source=copy-link&pi=Yp_4niFsR_Ow7&pt=506df87ab8d58d8cc3090e713c3c2338","playlistUrl":"https://open.spotify.com/playlist/7c6dzkeC723CXOcABw5eyY","photoUrl":"https://partiful.com/e/6yaCReYoMmNUB956I6e9","photoLabel":"Open the Partiful album","photoNote":"Open the event on Partiful and add your photos to its album. Everyone at the party can see them.","live":true}/*END*/;
 /* ---- Encrypted roster: each entry only opens with the guest's private access code ---- */
 /* ---- Board vote results (published from the host panel) ---- */
 const GUESTS = /*GUESTS*/["Aaria","Alexa","Amedeo","Andre","Anny","Bailey","Bobo","Casey","Clara","Daniel","Faith","Fiona Lin","Fiona Simpson","Grace","Jasmine","Karen","Lulu","Max G","Naomi","Nima","Owen","Parukh","Riya","Ryan","Stephen","Sunny","Vivian"]/*END*/;
 const RESULTS = /*RESULTS*/{"teams":[],"closed":false}/*END*/;
-const ROSTER = /*ROSTER*/{"v":1,"iter":600000,"salt":"FZkNWhWv1MLEV8MIJd5U7A==","entries":{"496a0c7bb7f376af37f4d9ad5efa87a6":"b6D3XuH+/QQ08ZotnitWrZCbO3iaS+LwPH6Ie5hbEE+KlWzhkOeNc7Ng2+YeEy8705jZ2h5caolQCCOEW7NooejunjoWKQiwCUcGqu3VjYS+fX2C85iDZxngvpqNXILv5hOnPZwGQz/W1P7irTc3A3JHas7hpOZf9pTllI3bt08XfjOW","83f12b219f0c07bd69180f31baf22011":"ujT5C8+g31AbSFe++RkqP561SPdBzphUrXgnWuNUu+WX05t2fUK0fn1WgdT/TNNoMiXJ95s7B6xuLi+kxV0x9lCNuwbCaZNOn/mVvCFFXa89YtQsACQ0+8JsCpfwBjcqVlJF/okjZuOnzBK2/9+gMCw9boUxyBwdbA3LlvHviuujW3v59R4DGgWsaEauBgBqh501TDE+C8mdeURMCjrlNuh/5JHafeVieNB0R+osiniCup+Hog74YRpkkVo6+Ai38XnTIIRPDR8=","713ade563f08d140d711f804735380d8":"44JHCe+yW1PXObGa0i7wUI4sVHXeXYzK3uC04tCJmspqObRXL0nkyU0iHfqiVP+uBeHlB4Xpjg5TK+4ZLgVcUq1ahIffRiK+HZ1CWII6fkT6YhrZ/CbPQ5PE57wxSVJJ/oXUugULst/3Mb6HCPXKzFFBonsaoAjQbjLCJeGsYucJ9YSfPErLk7uDw4RyeBrsvTWsW2jzRStPkn8zoQRBfITQKBN1IKhyCqVeFRFv+ccCpLf0uzLgrRoy3Z+fQVkt","580a8635f85d11734839c992f719473b":"HqBAxzhZSepnuytD9EJrBZZ+UbxYlFGLZ4z610S7jkVo3wZKrg5tutXsAjK50/vN77SP+Nv3NI7qvqkfbVen3RP1mKukHbN6wdCIYABF34zNsXF8ljj7vZQdwTYlq41f4MwHr56kos5Ast9YLysUEVhnuYOqXLuPwXEtbXVwtxLX1fyipPoRkjx5HuK/hWICtbo2n80I7KmYTQ4FabeJR/Ed9DQO4MofiQjrkzD2lN5VS2z+qd2434L0mxvkIQjVCIldDts=","ff63f141120507c549d35042f37b8bc3":"jySImIy1ywoP4p2BASkQW/10n/leD2ilyeJLyqAXD2qWhmouod8G/T1MTK111uhU+/GnGjXI4lJQDfNHzq7xlbdCawQoF+IqDLxxR2PWrC1sPCOZa7DqQsN4e8gNYBd2DrjGKX4U54+LgZqmiUOIxuyDflwb4g+xnGM=","34f18eeb11c03bc56a7ad3af076c8d5f":"zyhpDYb1uNgaUAH86N2B6v4M3bgRU0NWfzFmQ9DYkN/vq9PeT5tzqlIdj0X4v0jSVrQeipKIGU+8yx04eEEqU5OCCAC6uXUSDtqAvX6qEF9prju1MGupYwL4V4akkFF1eMHd8EFcpcSKMsX82sFdvXP9INSPBl7m/A==","ce379fd5848e8c535bb682a48e09ecbb":"aL2aoHK5InU7H4QkDTNaGaBwyGdGb9oF0iAncZHt1ayi1bdqOYL+Lo4g1QvNFefeUALQ7KmQjTAboS14cqTrJC2ascfMqBwKvElznpBGODaT3uVvj3uAEm37NalJMl/Hz3spT6DEayfYQ1/WPez49ShCY+5rPP9hOt2qfqCQM6EwwTK4RwRv1Iakz4wD6s//mFBTz1EgKnpYbyEVn04GInUzNyTXRYFCJaDq40qWuvi7Dc5dClCWOM7a6y2K6g==","a3f8e2c094cf5bf0e406bd93804b2901":"JePoS4hIeJ6BiyhsWLRWol6/soLLgizgFY9c8nvklYYpHI6zNwUETsQMa6/vWM6txxty/ucLimx6Oh8L+j+hxvxgb6HkVZj/+erjzxrVcR6APeTBIQbLQ52vjqg9QQuwALmtkqHoUVpEdthvIkm+7lwC+JRyB+wGks5fkax8y0JOef4lTB+N3zLjwJ00Zjo14Vkh3WqBOkkKlkCtffWtlp7nNdSuX+v9NYF02uMUM7drzkP0Y6jYiSfitg==","713665e6fd88e434e1ac86a47996fb4c":"VPLx6J4rIDOwwMKKn/WqaPpdnT33Y+iMOgsW0HcpNHuG6MJKMXV3WccPfxzcofxhAm/9xsVL9iS8r+vTALxG9OCRy1yxA5UQ63+QR+s6LPSrQrmFO4g7iISi2w5lY6MWoFm850pUf4ep7FTkMq/2d18pZz1t0fiJ8HkgNayMy6vmg3YD88vGr2JMl43yRFADrjhBQabhtQ0+hYazM+FPZPqfG1aT4hIZA2qdbw232O+mAOgKdl4JPiDohfu2xqRhq0QBcKI=","2bce2637ba0a551320af024e226de29b":"CE2PE/dUKXkzEoJ4KL+aZOOPS+Okf0y6PjAPmXU+vcmoWMDrYLyBVQU5yE6JRc8HIoAFfUfnLXUS+fTkNr4NNgKfr7EuiumTJVYdBylp2w9cS0P5Pbi1EG9NBJu8NO1qmF3L/CFWI7c/cOdbYKFo3MwkAN0Q1rwPtNc=","5e8d33dcdb4fd5b6e6f8a6b4c1bce78f":"kB8WVczdPdmK3CFxStrzneeGt1qIObKLaXY3BfY6WqD1ggV9oEZiSiy2RiH/0i5sp6diDdfhgb1eCJONj62sEh6HwNpLK5d1sfu8HgoTOUg4x/sBw+OyZxfdXC9YgdrkoCnMh09q00Mn7g7+TB3yQRhlgRKlh9nTe5vO0YI1x41/kcX57qEe2YM=","3bf7c9af58e5071a318b24cd58da92f8":"U/jVv63wpgPkmeCTb/+E7RrgurjjA10sRuILblYBt2WdaQqCU39er5SaPJhnVdZeHaw5Z5NSt7GeoN/lLPHqNqgZ8CPJGAwjU2Quq9bqkOygbjGQPx+V56aFmBmhPV6tgOjBPDgp8TrjxfGGlTFtkYttG9VBVUZIehPwPH3G+W0WTCa35bPAo4XGrHPTSVHIBwX6a3JE4c1X08EgXCABxmdBdien0dB3TbNIU8szTVbMK1ZpxwsqoKcF0tBCz+l0lpksUtYQWONLahCjqkWCSBg=","dd865fef41701928005a95fd325679ab":"n6KkuVYU9a5muxoQIEjtJH4CFl9I4Lw36EG45Hg70otBVOSG93QLxqNJne3lyTRDBvtbxV1uDPl9OhO0vT+ET2hFS3AHfN3HHTAr5tFUaPp1VXaUSp0pjF6N5UxGIs80X/jmqPr2NfNP+Y/WO4TTY4ymfPa1tikLNw==","9bb25460c95a0a4b2fbfb404b182cd8c":"/8Rv+lsSxvrAN5lXngK/KbluP+9WZ5+WKhHFFXAbBp0a277Nv2Gwtsp1e4T5Q9gkfMy3KZD5bc4xiFF1YI/jS/3WOwpbhUz/GTKgeqdbjI05Bkirrkbx6enk6yGvmltWNL52X0WNT2cZ2W9ckxNTBpg+agxt4xMGiUfzs99QjRUfOhY0Uik=","4c33a293c0beb785249d9ca878bbfc12":"BdvkBYz6O/V3ZTGjfc9D1nCYB8tCTfbqQKYRnfWXZp/w7LY9Kr39EtnYc7caU4jet0iNm6Wt6m0GFUd3qJGKcCtTKwKLcMGIKPuOWLlAwCmksdx5eRWYUCBozFh+iZmHP5tnHm5YHj67jnTJYpfigdHw6DNAxvi0vlHu69R3DWq51dVQTg==","67d5b19e912b32742a79310f75e68574":"BzhzHGbWZW025nho4zukDvFfaJd83Kj7ec6NKzWK7mWnLcIpdr1MLxOLe1A3lziP/SKAfY0XuJsGvKoVkwyYq0K7r4Lv14BI7FSld6oKzheFSvwK54CAuHJcWwEy0kh3BFAwjhssQePXpdcouArR+B3pzDLoUkuyvtnNux/5It7uoG0KTOjf6+bp3L21Be1tjAYMF7g=","7015a918ff995bcefeaf5e902b826a58":"Wd2bUQboY4nSJchKwRdLuUI3PRma0dkt5rop4yCyFpfXVltFzASxymxhIjcRmRk9pl7U2uhYiapPGpPjQ5R3lO+ABKZ//lPqsZTKYL4JwG+idZlc4b/ciYhVAy716M9rWGotQN5BVgynhxe6hk354X3Jc8/zBzO0pmBJrxkvztKCmCg8","14f3dbbe811ebb8f3ee90996626c20e5":"Se0d7mzRegiRaAUNK4xFzqHEt9khprZemMqpgU406ymoI197sHcDzo3EQF0pAVmcJWbgVK5r9sor7+Z8zaC7CMC2Dslr0TewGUQkkcoOsZM0rDA2XhKFXkwRHGsX2tIVVA4Vedf9lvJZod+vj/bcQu+W","6f3a00796949303c1cd03f926fc9d801":"3AuTCTlH6m8Vv1/QmOSLq9mKxCbYoP5uiyE5d/zivXYvB2xglx1pOkMAsFHir8oDySgU8FznUe3KM7N7wjzr7w+dtWk2l+Z1XWf1n80ZPSdt1sxHHwSa1InX3EjIznkJF+qw7Us8bGq6POUN7o0a2OxyU9R/sKYrkR6DEqs4kA0/w/pAP7BrCMGPGd2t0Vp4Ol7fGZV++UU8CjmHegtYJtQDpr7LHVyyUyihBxLby68eGxbhwSIhMZhhsvF02V4S9qkzyBnEqLPH","de1dc95c8d39d94f09850d99fc5554b0":"cPV6n6DMS7fXK4LEQNIs0t+/jBRbTGerQVtbVtSgKrGU5+0jComGLYFijdY+6w/XpSXiVPD5lFZUxcpwdSEit1Mi+zN6ZCbnII41osZCl1hrrPrBhIUj7VwDyW+kYzo7qKnL5N8kducPdVA5AD3sbwFY6n607j+QKhgpW5+YZpsPtkmGDwHAKpjCic9mX3ra7od+PvwF0UhQLChbP1qYjm9jKzFdFkVmJJqAl6ZtOrQZHC2gEho9HVj2ZQs2MfPvinimEt1Seo8=","4d5f5888ec5ca87cbe58b6a1b0977c5c":"x9gDaYRIZZ5E0Ww/GDoUhJsJMMrRH5xWSzts4DrH/2+Sah6fWX6G6YuxFpZyp0D+8QYwkIMu8RFuPLbZoCWvqZjcJR64BQKPeT22rkmJDsYvxE1VOqsvqwZULHaOZ7J7w0fmp4huhUP86i10Pj0iMfi+XRu+cdVElx9W0i0OCpunSbG54qJHF7KccZpedxqdaVrIhHTt4PhdqLpbKbOWoDAJwJGGzE96+6afBdiKTiWim3vJQqq6CwYUW3/cdQ==","a49e2d54d9f5af8d2c094c3c9ff5e0f4":"Gx9yyhN6R5eP9Nk0917+TrJoy+Vxe47zPoMeyydhHqVTdAaYi4qyTNg8zrYnLaimwoDXnmAPVIbTUAfqG26fqWE7PAujdf4zuIlAvEFR+rFPrx6gKAw77pHmtEfeRgzeDTN9Vpojx9Fp5AIiBSx/Yht6I1LbLRjJXYDbNRI6WiB508pUmcZeidjq/gpGqMZL6QKBWmZ+35QKxEGB8n/5CiUve6Hc8O3+UtukFJj3NP1orkaFofryKyAAETPyeic=","7088ba84f5043498750253b33fe68997":"J5Oa0hXaML31koEaal7vE2M30uktJGg2hHeDdR9cpOLqy58ldwIBpSigstkNDuCo0EjCwgly+ROuHLWCr595zxdU94mWg44NxNvjSf9ueqHbvxuf6Tngbn/GvUAInWVfrMphtz/oH7EGqwdA5cQWuMB0IGRodMxkJZ1S0QQq+PDoprpTvL6mUhe4xIQHw675x27GnG7YQM0pLlJ0La1Ng/2gZpSJezMQIcHJcMmuWmWSP3DmbPxdStiz7b8IZsezzRCtHgXwwpnubEFLRjY8yYCk","923773cd39ea232f473cbe2de79e477b":"dpiYC1iGmGAHltZ+E8/77LKtb+U2yGydGMhj2RT16JRoGyzqvMcUhElfA3LnnkiN78fHDTOetDlHftwnJvQhefs8GvtiF/frbDGs5l4nkHtzkWsj3smJxeoisXbqjBPL+rr5Zh2avysOS8ZRbSYWvIz3oeLyR7x2WQHWSF5i7y5DouPWR53SHF3bAsIGdICFfcQkZkMfdjv5qQLwR75TrRhwMviAJdqIaX4j9snZ","2b9a2f5dbf7f305d7ab9cc9f6885d5ae":"HiJTKIKSqwPKS/xhFCTNk5a6HCLFiRJkzpOkWQKJ2L/k8NUggSlfY6xLSNkd9dKiOYuXKq8kf8rs3eUmBMK4lYOjvO9m77ybMd5uRnm5WPc8jU0zrZQRavZO2HSOpF7RR3vZZvounfG3+MxiyJO9p9m9Mc6ntSTjHXRMuH99Di7sqmH+g9QqrEb9bgyOEGi48VSJVBbbmJ2yNQpYGrSauT4w+EgBNknC+TKaxZ/MXOyHa9ejH3Ur2mSoVSrsLaQ=","0538f2c800486070eaf51190221fbdc3":"sDY2K0be9J6j1XbsCEan0e3rmgcT2QLRvvSL+pjnwecHviKIh3zyUBtceLetU1YgQcmd+mw0gf4pHgdcjNP3twgpIYxjTA7vrsTF98uYKokQ5QjsJc3jBCcyZyUTFUA4xNgX3q83GRTHRUB21U0vCGDSRTOIQUZFxzYqvsIVA5mqhWMmDE5MliPTOw6RQWmWnhBjWtKDZeONBCar0e8sTpcB8wDNzzZJvDCMKzaD2yRUfvEx/vhjUB+06k3g+PH+Xuk1YeAO","3f9277fc7bfcfb627415ef60080fc789":"GKuZBh9hmZBuikbmtqPbP2cM8SJrdrm1wBcqZtY8yw3zCn974sYwSrY9ON50P4gFsCHmkKOHnz0BDDXZoD7dYWR/7E2JoWsvhr8Cr9vTr7fVL/FR8v/ARdx5lE3B5jj0RD3ZnTglT/7HkWxSm7f199vsMXM9WHV5yNzbUDHBDaZt9+cEQFYbAivQQc1FVrTa6Z/Xa0/VA+HPBW/RLDURAwkPG9z8gXWyUg/ad2Sw+GkJZZ8liSSS7jM2BRAENgCLtO3ox9GBm7dUg6IXpA=="}}/*END*/;
+const ROSTER = /*ROSTER*/{"v":1,"iter":600000,"salt":"SyIrefURNfEl9HYdRe6KYg==","entries":{"22446478f767df3e39fbec8db6262af8":"7N5Z0ktZxAyTdmjVaLrridjVE3nqPcpA7zVM+8i4VZG0nmVontU9t7NN7Ex4QajuLA0Cq/o/TXgwtpr4C39goFZns1kooaQeuo63RXA/qqap8XxTrukXzJZ8eJXUAVN1iyBYURwl9HdTJto7x+KTMdC/012wDmNoNXU=","e3b153c1a997dd46062f06a0fdd8f323":"mpRPrKe+D+n57ac3wyRwj2pcqgOI17s6g4U1VnhTdC/1x+HfGz19+x7vt+0xGDffslX7ZeQZi18cQLUSXV9WYygO+gYTRx2fRdJfRGPDfOC1lBdtjwM4C8cvFzwhYMOTrNO3RDDfECyQBUHnxwPuUP48Bc4zE2rhVT8y8OYqmQMfxX5py+NyG/TiXfjIF8nNFulRTtSRIhFJn0hge9cDmPlFEfNWd5fvN5r2eCjSo2k5ri/9F/aACwBKhTRsdpnse/QmZTaR4Wte84ixKWTBSyw=","bc24798ec3ae26f398aa268f455196cb":"JxsLMnzOJEs3tQ9+LrSd9utZ0LU2vy5CAISlDFY4SOOk1dYPAkqQ3W6uR1GCnndB11wY+gLHflXRvW+KYz/2K8kjmyI3cZQcbNRgWliI8FfrL77isFKDnPT/4cJCxsKXFBzpwJHk83/LQYA7POsXzmcJIdtcZAnD3Yk=","a7122dabcaf18ab5beb0f946e23d7e28":"FCcU4TdzUVg2R51vxE1xOnxxDHc6uy/yo6DCltDB41slGfJrWZqZKAfaB/y1okO2gtzhHDd+Hjr4aB7PELXOIgT51q2Y8xys3iwkIMzZdNaqDWdm52gF8xWrjbYHO/cDdzkFMa1crK2cy1XhHfKqI7HQ4Orf/9lM5J+FEhPVn5aIn7EhE1SkM3g+X08TPAYOsTaJcWY6iHcIXSqWqTzUvdeaerOPi8yG0MD0w4zFfXfgWtAZK9IHaIdC9URCEWRvySFQPxMb9P2H","b23a86ed7192b2be2fdcdb17887b809e":"t14JG79iKcE2hBPGPW4ECQxPfLoJBLHmIk+yxygnihXh9DAQEDXh4IXHiLm0hqisxpzH4nOL8sfqGuq8FSPhO1HaktmdSjtix/1ox0iBbwBHZBE4GVmZnw5syxH9wXjGNBESdSFTQe/Q+PtvBk19Q5R2xiNp8XehTQ==","61bc613af11a83277f3c26b4429ff1cd":"LCPERNI5xgpdrd8Wgr5g1IfFbEugNe1mNVsQwL7JZLd4RaPlYxrjPfUkIYVpwuQA6cM87a1yPhWbiztDJIR8TuNyRyybPER2zlMFz2yqigQdqcZplFXH5QaJKjmctHYHDnKf3OAOkQ5B3ZHteGbzIbP6","d93b7535abc53a2874aaa4931422325e":"JV5ap9Urj7Ab/L/+5AQ5ux2HSnRsfc0T6fSqziOib1ruzY1vwXT6adpoTCViQ9j8OTM7sBBRrYXa70Vmu8kZsge6YtYQqJzdX364Vr0EkUMs/UGLKXEYSvkrjfrD0psxwhLbx45B/9/VChKaULBaD1e+J6uWPZ5lk+3cnA6Gh7dtsWoa+d4=","46ff831187010e13a7505e98ea0fa7bb":"WDnmxzQcsELP2z5A+GuveBalyCBNiiYaadOzFKZKoEjvU5U2sobv4kfCOe5+iUpsAwdJJwq7r3hghEVUa+iQdv9MOB1yZa4YuRl3RUDL/08TDDSWagUSgmiBWCKI1B1LVuERmlwQC/SVOyx18msREAUVFBY9qmyNAQrIyR3tRtuIeok4","a697ed0b0ff298e5d059b39e4eb28d1a":"/8OHxPdbvc3uDBW+cPj+A20dE/t9zUpN9DZRmKFua8Xyg16gyO7B1DE/6HfSJRb9YUD+YMVnVKhmh2GqG5EAwcR6qldJmxtVbzp6woSQwzK8mKOkRBAAWk/Cy+DYB2h26l92uK/F04xPaha89nk9C4p3WC6WOwE6Ao1om3jjhcyzElYk","b547b201ee71675c1628ec79a11cefeb":"bfTPPFJLhpCqcTRfbIFs5Df7uZlYjy600G2CDkzp9KyDOT1xbl/ArdtxqhnPRbP9Wc9yLmSzwCzDz9pQ6N+ctEveIqlfblPgjlNxXMML38vkDHARi0qSQYZYeKiJXPfee04uIzIgyFkl8r9LN1pfIDF5rnJ//KIClEAr+tbnj3tWAKr4T0jM+HG/EIK1cEiFNzB25x5uE3+jcOv2yhr9foKu7TNgcdSOzm8kMas1","e1118d7cdfc4827ab3156f9be50c7f58":"H1IJH5F9vKkuVP3lSjfhHJ3k2oDwgMhmSvODgvBoQkuOM+U1GEijyhQaInmjwGCUGbjLSy50nEwf3SAShRnCLAQ/WGXZqULxk19WrIXxvoY7dZzIjywcvQ8pooAr3VXOZSFIRUQS7CTvTmDYRMmUqwpKp7QPgU4f8eg2sxpOzbRKa7Km+74qQAAGtoYtNb5q/P2CS0jjgv5NYa3RM/Q6jEthRz5Iqu257IevzBh31f65lfwwF15t7z7VzNPQxyFC0VvYkqTnzpEUhR5sWg==","3ef501ac857c79b8994daf132c9b97d8":"9zWUrrOfJC1lMh7daShuqpvrIJEflqz9U5kUgGlurAMC44OHcqhGKezVZowsun1JYxEOd6unGgmEXZGEJPIg+6apd0ZuGlni3cbOgq09mPmh6y6JiEjyJhkrQmp76mw+QHPPN+oNBMHamWCLktv0DmH1i+32PZBwUPxmWzT5oavf4euDzmfoqr6N47OdvuCT89AGEPIT8CmNlXRjq0qw1pApItTM1PCZ2N/GkaPq5JTnZT5rJiAQfp9KUowaTxsQmym1i8OYb5Y=","f25514a6f8f64a5e1c8429cd6eed8b7c":"+WuExcXrUS0ChQ/L7774QC6hs7TnOfPGPjDD809MBTCBSis1YV0W27GkDi27cj0UcoQkjaqYYcUr1aavNCTTnP8b6ce2uD4PA6eQlQZAwToe82eAfbvaVNnyoygdXzIdNp8Vf57aiPASc25PZAYKXCBlDm72Rqscrb6CvkcBgODBgOnawLXdnNb1fCwXQ+QPff4TAbe7+IVxWmpnbtk4Mt5KPvB2/EVcQGmrnayN9uq4rJAY0zQ+q++yfQ==","345700a1e5107819e236fe531f9ba660":"9cd8E9/aaUQRBpXhVHgmynCpGZ7VriReiMwRkqyN5BW9pv+HD/U6Or047sUkwjpa7E6j0b4uT1Fjor5F2Kwa3t6hOpZiaZ26Z+Xwm6KBAr47g0T5J5CJo1WQL68NSx64DeQZSl3UkEbfDu2pHhq/fYqcYWP40LwIzoih1f+QjZ+bGEOk0Wl0Kqz9UQGPaxLDLJ+TxMBGBHa0mmIM1Mstp5hGoW81ny6Ml2fwA/48GKeW5LW9n+Uy5KOfP5ZpMF7Y9S/Air0=","a16ce0e46fcb9d2f001a56b7f9551426":"Txkp7N/YWarOuwolSV5+aHkCvcx7M5qeSY8LbjKFGhwhIMw1JGmS1hN+Y9p4DAw7B1c+ZMtuQovR9yVn47YxeKXH0PEy1S1bifJhpntv8dkKhBDYxBmhAxP4J3H99+s0VFoLXWoNxLMS7uxonuOiLIXBzVHhIGs614THMMc0hs+u3fFnOuVxqZhvQohUWA8+XqcoHkF8Qk8AHQEy6XVfSdWXeL3z+fw99/G5SnzfzLgVi/8o51IiurirVIr+m7RqWADIk2wy","e8937875deed417e939ad8759101b965":"Rw33sDN6XsX9clE0u60C7PP87ofmvUZXqwEQNG+jrwUizYBZFJ76Ma7dmw+ShIAzSp0gQdkvl+zyc/Ld+1oRaRsvrdulFhZiR3ONYJfzYUrtqMIGPb9vyMANc4wc2vFbUAtWU1lOwBZrgs/ScBt7St5RMpDNJKBT3aXxp8GiVfH2Dqz5D+wSb+xKXCQDhx/qimMP07pKEor1CAHti0GwHuzdXRFRwNAL25XdIec0D2ZzbwhjIDffihdEBEL6tOmLHXXVt48=","80aca3da113ee78149205e6e86d66a9d":"ffQiejkUQHmw2GhA2MgrhMNnKkx21TfaLqUvKnBMLHGKpSOdkX0bb6nqObpTCy0TA92+52CyTiyN6NMwJs1xOCMDOFAeATnJXb4cSnBnXYiBgDqikKnIAtXQMNgS8Xb21qScTs/362oL+wqYL1pLordzfSeZdou41Q==","5a26d2be37605fabbaf063bc10988779":"sD8yljWAwdGNk9ELYZLZPOz47NnyjbjWP/LR1qcPvZMAQLsMRkqUB6elU/toluvar6wqT5YdxblBARZGEYX8Qwtz6rfMt5JiZZtGjpC9jJWVCcfbaiXx/zvGzzBYJi4FBAZIAaarQuiIuO1up5GFlXXmhXYCiQBur30IABjpbjCI4/Ms8tQBdHgjDoGsduqzh94W9PsbuE/VG6B5tf+eZbD1LnVjGamZ8iDrieCw1fp7dtwetAm1gvQ6bKNPKA==","f645792fc4ed6e99fcf3a51783d050c5":"Ge4pEiruqtPqQyhqw5QoRaSkEfdFESKSjvKLHdi9l2ztRQCSB0bE3BF68ClKb3caCQuakfstCOkPk2iDWewSqE0/NVGjvfc0pEost80fE8AGemdYlI8erwbg51kvI9qL/NiW6jK+BSd+Q1JJAz8WNJ2/Mp3M7nmXoY7LXHOo90UKbLa+i3cLKeVZj7b4uus56lM7GpU=","fa32743be82df9875c40c67b5c07e4b9":"U5tObNaWpNx2R6V3AKxY5NLSXyiyG9orqtVT4jqxGUGN74nwZi9RvA6A1lBqvxVM517YD+UOJh04q6eA7Ce4iGu9LnSM8ljUcPpvMoI2bu76cPzV3XnB/LV7hLd4XTt+2PIAu+17CH1TQu3G+EB+GFlLNAfD3p4yGO4CXcd7lNwUhVz/TNaxMSM=","2362ec9917ad9881a6f757cefbd07135":"N5/WZ+ZSM6T7HG9Z7eOWG7B6JytMwBK/MLTHXCBoDoXwfLDPlUPVZVAwwL7kY66KcyZsbosn9Zl7dhCI3VTEqzwO9pYI3/fk99IQk1wE1yokaJF1b61E3WhJU46PRYCmZzz+C1StFiGgJj9B3/+KHh/0ABqqYloWkXikuXkfoB7q4Y6JzWxU8ExmRnOPgb+gGaTr3BNEeIZgY88saeoefFyPG88+VX1kDyBIpTgSg3j7imrdGBvSjHLx1vpU5r3f","ae83fe4ea0c0d38fcd24310c7298c9ce":"7pPfkkjBd70yi+TJj5e6tkqhlZeo2EVBaroSvV18kWZtV/gvaNL4ANqEM4431i8XsLk9Ihjm5K3jSJfOucHqMfBqffPLACjQGairSUS0sY3yiD06ZTLf9rvGVLzt80+LgkBbn1lMtOmk6xiW4OPMFIQOSt4y45UbxeWHsHvtTZlM5CJT8ZuSccrBDDhaqZgmJlCLXvf6NFJpMyi8IigwoguMMWLAA53/iT+0nQctnBNbj8W0QfLCMD29jkGAb0s=","74273e58fd1329e56b8bfc50ddaafe71":"Sn8nppugN0nm6IXUT+DTdKJiSPVwX7szkpxW+5BWMjBYoxbHOpIprh4XjyUyLmK4Yz3fN+x23NnDdriIgY4eodZFgVx4AW3N6dpaWjCfbBP7IzZBxYVt1ttK8gpl8AltBzd1Zdc3h2ytC8jy2I43nO0rgI9NNr34aAM0yFS5ZkALpN+VIYOL1e94qFSl5bpd14rD2gc6NUeMAykEPqMbltkOYgWa/w5llZPTOrtVABD9EWmY3JHY/nubQ2XunT0j2wTa4QYN9Eg=","ba0990aed763810406d6aa743746e962":"oBSQAyTKyp5Xj/TL53XE1SUb2mccEJS80NvWnslJjGxJQuwjfnzr1iGTOXlDz8AGhrlSHaLVVk7WnEKjeauuFKHot+MX4lno9jvZY9EiFUK/ST6p6lV5po91qXrZWrV5Kt3+kvx0zs7kDnWGMxVYJOGHRq1Uax3sQ30DyKYYhZylWtW4meOwwuzAILZdCZjJ1UftJ52WXIPUay9gSPhzLXZ/GVjrdN7H79qjaxBbz4oVc0fqUjNJ4oh2tbXW0r8=","5a072db190160c3834d6e903380e76a6":"GNnQOxWo4g83dj9mo3m+2A7AxlY9USw3JZU5r0/Cq0NyO/ONGKS5AkmXuaOBJlmUYiaNHdTryI9WRQO2aSRALis6R8bsIZJOehY42jjV0M/ydm0Y1f0muzchI/x7JB00vdb6lUlqUWgszTSmF8YRYcPPOfoXXhfA0bcKmMpjxa9uGXxjew==","9843619640d2777e0fa7b70fd1a84981":"YrsrHmu9q7MH6m7ynCWJBTLa6F3met7euiHZJfP1eNFqTDjEItKsnXjRg0FVfOjcIi41nHfti0/U0V91000Qubhf2cqPmMlXIdsCTIo82q/RR2+tcdgTSLcVOihjL3NdIQmy7nS21wCYwgTqxMbnzUuFYfiibxxAg7mw2MC0Gn7XSEuw/2tYp41+DUjPbTI7iY8uKSnW415G0CvPxpJR3lVmdq7cdpK7A2gmyHz2mQ7iap/jFwtRzHyTYs9vKeA3kJkOexqleD7KUJOJj0qe8ETC","4d32821ca7736a73689b423c387363da":"z+HZAGPAWwdkVjR9bLk9ovjonYcoGe0rao3XTg7KepRS0f8O7L/VsVbMP82IyiGm2kRQIoB9eGsXf7hZPuueiWkL6RCmZk9sPu3ymTPnK5RewfMcMhN0nJE7kplIo0IqQm51QOO7NXoaRUgQ1GyQOtaW467nKuOKTsfTtfk5lO8BfhEgERzFKR4G2TFXKHil280zHbtjplbLNR3snHfLrVvs/+H6KvJgHoux+qeQAzhLLwi6P25KWbXI3QofVA=="}}/*END*/;
 
 const ROLES = {
   hacker:    { name: "Hacker", color: "var(--hacker)", tag: "Secret · bad guy",

@@ -269,6 +269,27 @@ section { padding-block: 28px 0; }
 .cred .hint { font-size: 13px; color: var(--muted); }
 .cred .copy { margin-top: 8px; padding: 9px 12px; font-size: 13.5px; }
 
+/* feedback (post-party) */
+.fb-banner { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; border: 1px solid var(--ice); background: rgba(111,211,255,.07); padding: 14px 16px; margin-top: 18px; }
+.fb-banner p { margin: 0; font-size: 15.5px; }
+.fb-intro { margin: 0 0 18px; color: var(--fg); }
+.fb-intro small { display: block; margin-top: 6px; color: var(--muted); font-size: 14px; }
+.fb { display: grid; gap: 22px; }
+.fb fieldset { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; min-width: 0; }
+.fb legend, .fb .fb-q { font-family: var(--body); color: var(--fg); letter-spacing: 0; text-transform: none; font-weight: 600; font-size: 16.5px; line-height: 1.35; padding: 0; margin-bottom: 8px; }
+.fb .fb-q small, .fb legend small { display: block; font-weight: 400; color: var(--muted); font-size: 14px; margin-top: 2px; }
+.fb textarea { width: 100%; min-height: 84px; resize: vertical; font: 16px/1.45 var(--body); color: var(--fg); background: #05070a; border: 1px solid #2a3544; padding: 12px; }
+.fb textarea:focus, .fb .opts input:focus-visible + span { outline: 2px solid var(--ice); outline-offset: 1px; }
+.fb .opts { display: flex; gap: 8px; flex-wrap: wrap; }
+.fb .opts label { position: relative; }
+.fb .opts input { position: absolute; opacity: 0; inset: 0; }
+.fb .opts span { display: inline-block; padding: 11px 16px; border: 1px solid #2a3544; cursor: pointer; font-size: 15px; }
+.fb .opts input:checked + span { border-color: var(--ice); color: var(--ice); background: rgba(111,211,255,.08); }
+.fb .send { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.fb .send small { color: var(--muted); font-size: 13.5px; }
+.fb-done { border: 1px solid var(--ok); background: rgba(62,224,143,.07); padding: 16px; }
+.fb-done p { margin: 0; }
+
 footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; letter-spacing: .14em; color: var(--muted); text-transform: uppercase; }
 </style>
 
@@ -284,6 +305,7 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
     <p>Heartware is launching HALO, the companion that loves you back, and you're on the private beta list. Everyone in the room gets a secret role. Two of them are Hackers.</p>
     <a class="btn rsvp" href="https://partiful.com/e/6yaCReYoMmNUB956I6e9" target="_blank" rel="noopener">RSVP on Partiful ↗</a>
     <div class="notice" role="note"><span class="label">Company policy · no gifts</span><p><b>Please don't bring a gift.</b> We're heading out to bars and clubs after, so nobody wants to carry anything. You being there is the gift.</p></div>
+    <div class="fb-banner"><p><b>Thank you for coming.</b> Got 2 minutes? Tell me how it really went.</p><a class="btn" href="#feedback">Give feedback</a></div>
     <ol class="hook">
       <li><a href="#role"><b>Are you a Hacker?</b><span>Unlock your secret role</span></a></li>
       <li><a href="#venue"><b>Show up at 8</b><span>Gate code and directions</span></a></li>
@@ -298,7 +320,8 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
   </div>
 
   <nav class="chips" aria-label="Sections">
-    <a href="#schedule" class="hot">Schedule</a>
+    <a href="#feedback" class="hot">Feedback</a>
+    <a href="#schedule">Schedule</a>
     <a href="#roles">All roles</a>
     <a href="#role">Your secret role</a>
     <a href="#venue">Venue</a>
@@ -309,6 +332,48 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
     <a href="#dj">Help me DJ</a>
     <a href="#photos">Photo wall</a>
   </nav>
+
+  <!-- FEEDBACK (post-party) -->
+  <section id="feedback">
+    <details class="fold" open>
+      <summary class="sec-head">
+      <span class="label">Anonymous · 2 minutes</span>
+      <h2>How was it, honestly?</h2>
+      <span class="chev" aria-hidden="true"></span></summary>
+      <div class="fold-body">
+      <p class="fb-intro">I want to make the next one better, and the useful stuff is what didn't work. There's no name or code on this, so I can't tell who wrote what. Skip anything you want. Short answers are perfect.</p>
+      <form class="fb" id="fb-form">
+        <fieldset>
+          <legend>Did the game make it easier to talk to people you didn't already know?</legend>
+          <div class="opts">
+            <label><input type="radio" name="talk_to_new_people" value="Yes"><span>Yes</span></label>
+            <label><input type="radio" name="talk_to_new_people" value="Somewhat"><span>Somewhat</span></label>
+            <label><input type="radio" name="talk_to_new_people" value="No"><span>No</span></label>
+          </div>
+          <textarea name="talk_why" aria-label="Why? (optional)" placeholder="Why? (optional)" style="min-height:60px"></textarea>
+        </fieldset>
+        <fieldset>
+          <label class="fb-q" for="fb-lost">Was there a moment you felt lost, bored, awkward, or unsure what you were supposed to do?<small>What was going on at the time?</small></label>
+          <textarea id="fb-lost" name="lost_or_awkward"></textarea>
+        </fieldset>
+        <fieldset>
+          <label class="fb-q" for="fb-change">If you were throwing the next one, what would you change or cut?</label>
+          <textarea id="fb-change" name="change_or_cut"></textarea>
+        </fieldset>
+        <fieldset>
+          <label class="fb-q" for="fb-keep">What's one thing that's worth keeping?</label>
+          <textarea id="fb-keep" name="keep" style="min-height:60px"></textarea>
+        </fieldset>
+        <fieldset>
+          <label class="fb-q" for="fb-else">Anything else?</label>
+          <textarea id="fb-else" name="anything_else" style="min-height:60px"></textarea>
+        </fieldset>
+        <div class="send"><button class="btn" type="submit" id="fb-send">Send anonymously</button><small id="fb-msg">Even one answer helps.</small></div>
+      </form>
+      <div class="fb-done" id="fb-done" hidden><p><b>Got it. Thank you.</b> I'll read every word.</p></div>
+      </div>
+    </details>
+  </section>
 
   <!-- SCHEDULE -->
   <section id="schedule">
@@ -578,6 +643,27 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
   </footer>
 </div>
 
+<script>
+/* Feedback form: anonymous. Sends only the answers (no name, code or role) to FEEDBACK_URL. */
+(() => {
+  const FEEDBACK_URL = "https://formsubmit.co/ajax/heidihyn107@gmail.com";
+  const form = document.getElementById("fb-form"); if (!form) return;
+  const msg = document.getElementById("fb-msg"), btn = document.getElementById("fb-send");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const data = Object.fromEntries([...new FormData(form)].filter(([, v]) => String(v).trim()));
+    if (!Object.keys(data).length) { msg.textContent = "Answer at least one, even a word."; return; }
+    btn.disabled = true; msg.textContent = "Sending…";
+    try {
+      const r = await fetch(FEEDBACK_URL, { method: "POST", headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({ _subject: "Party feedback (anonymous)", _template: "box", _captcha: "false", ...data }) });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || String(j.success) === "false") throw new Error(j.message || r.status);
+      form.hidden = true; document.getElementById("fb-done").hidden = false;
+    } catch { btn.disabled = false; msg.textContent = "That didn't send. Try again in a moment."; }
+  });
+})();
+</script>
 <script>
 /* ---- Host config (filled by build.mjs) ---- */
 const CONFIG = /*CONFIG*/{"djInviteUrl":"","playlistUrl":"https://open.spotify.com/playlist/7c6dzkeC723CXOcABw5eyY","photoUrl":"https://partiful.com/e/6yaCReYoMmNUB956I6e9","photoLabel":"Open the Partiful album","live":false}/*END*/;

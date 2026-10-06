@@ -296,6 +296,17 @@ section { padding-block: 28px 0; }
 .slide figcaption { bottom: 18px; color: var(--ice); }
 .slide.on img { animation: glitch .45s steps(3) 1; }
 @keyframes glitch { 0% { transform: translateX(-6px); filter: hue-rotate(60deg) saturate(2); } 50% { transform: translateX(4px); } 100% { transform: none; filter: none; } }
+.lightbox { border: 1px solid var(--ice); background: #020306; padding: 0; max-width: 96vw; max-height: 92vh; overflow: hidden; color: var(--fg);
+  box-shadow: -4px 0 0 rgba(255,59,78,.6), 4px 0 0 rgba(111,211,255,.6), 0 0 80px -10px rgba(111,211,255,.7); }
+.lightbox::backdrop { background: rgba(2,3,6,.88); backdrop-filter: blur(3px); }
+.lightbox[open] { animation: lbIn .35s steps(4) 1; }
+@keyframes lbIn { 0% { opacity: 0; transform: scaleY(.02); filter: hue-rotate(90deg); } 60% { opacity: 1; transform: scaleY(1.02); } 100% { transform: none; filter: none; } }
+.lightbox img { display: block; max-width: 96vw; max-height: 92vh; object-fit: contain; }
+.lightbox .cam { position: absolute; top: 12px; left: 12px; font: 500 11px/1 var(--mono); letter-spacing: .14em; padding: 5px 7px; background: rgba(5,7,10,.72); color: var(--alarm); }
+.lb-x, .lb-nav { position: absolute; border: 1px solid var(--ice); background: rgba(5,7,10,.75); color: var(--ice); font: 500 16px/1 var(--mono); cursor: pointer; width: 40px; height: 40px; }
+.lb-x { top: 10px; right: 10px; }
+.lb-nav { top: 50%; transform: translateY(-50%); }
+.lb-nav.prev { left: 10px; } .lb-nav.next { right: 10px; }
 .feed-ctl { padding-top: 10px; }
 .feed-ctl .btn { padding: 10px 12px; font: 500 12px/1 var(--mono); letter-spacing: .12em; }
 .reel-prog { flex: 1; height: 2px; background: var(--line); position: relative; }
@@ -665,37 +676,37 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
         <div class="feed-bar"><span class="live">● LIVE FEED</span><span id="reel-count">01 / 07</span></div>
         <div class="reel" id="reel" tabindex="0" aria-label="Party photos, swipe or use arrow keys">
         <figure class="slide wide" data-i="1">
-          <a href="photos/party-1.jpg" target="_blank" rel="noopener"><img src="photos/party-1.jpg" alt="The lobby before launch" loading="lazy"></a>
+          <a href="photos/party-1.jpg"><img src="photos/party-1.jpg" alt="The lobby before launch" loading="lazy"></a>
           <span class="cam">REC · CAM 01</span>
           <figcaption>&gt; lobby_pre_launch.jpg</figcaption>
         </figure>
         <figure class="slide" data-i="2">
-          <a href="photos/party-2.jpg" target="_blank" rel="noopener"><img src="photos/party-2.jpg" alt="Critical incident" loading="lazy"></a>
+          <a href="photos/party-2.jpg"><img src="photos/party-2.jpg" alt="Critical incident" loading="lazy"></a>
           <span class="cam">REC · CAM 02</span>
           <figcaption>&gt; critical_incident.jpg</figcaption>
         </figure>
         <figure class="slide" data-i="3">
-          <a href="photos/party-3.jpg" target="_blank" rel="noopener"><img src="photos/party-3.jpg" alt="The board votes" loading="lazy"></a>
+          <a href="photos/party-3.jpg"><img src="photos/party-3.jpg" alt="The board votes" loading="lazy"></a>
           <span class="cam">REC · CAM 03</span>
           <figcaption>&gt; board_vote.jpg</figcaption>
         </figure>
         <figure class="slide" data-i="4">
-          <a href="photos/party-4.jpg" target="_blank" rel="noopener"><img src="photos/party-4.jpg" alt="Who was who" loading="lazy"></a>
+          <a href="photos/party-4.jpg"><img src="photos/party-4.jpg" alt="Who was who" loading="lazy"></a>
           <span class="cam">REC · CAM 04</span>
           <figcaption>&gt; who_was_who.jpg</figcaption>
         </figure>
         <figure class="slide" data-i="5">
-          <a href="photos/party-5.jpg" target="_blank" rel="noopener"><img src="photos/party-5.jpg" alt="Guests at the party" loading="lazy"></a>
+          <a href="photos/party-5.jpg"><img src="photos/party-5.jpg" alt="Guests at the party" loading="lazy"></a>
           <span class="cam">REC · CAM 05</span>
           <figcaption>&gt; exec_team_01.jpg</figcaption>
         </figure>
         <figure class="slide" data-i="6">
-          <a href="photos/party-6.jpg" target="_blank" rel="noopener"><img src="photos/party-6.jpg" alt="Guests at the party" loading="lazy"></a>
+          <a href="photos/party-6.jpg"><img src="photos/party-6.jpg" alt="Guests at the party" loading="lazy"></a>
           <span class="cam">REC · CAM 06</span>
           <figcaption>&gt; exec_team_02.jpg</figcaption>
         </figure>
         <figure class="slide" data-i="7">
-          <a href="photos/party-7.jpg" target="_blank" rel="noopener"><img src="photos/party-7.jpg" alt="Guests at the party" loading="lazy"></a>
+          <a href="photos/party-7.jpg"><img src="photos/party-7.jpg" alt="Guests at the party" loading="lazy"></a>
           <span class="cam">REC · CAM 07</span>
           <figcaption>&gt; exec_team_03.jpg</figcaption>
         </figure>
@@ -706,6 +717,13 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
           <button class="btn ghost" type="button" id="reel-next" aria-label="Next photo">NEXT &gt;</button>
         </div>
       </div>
+      <dialog class="lightbox" id="lightbox" aria-label="Photo">
+        <span class="cam" id="lb-cam">REC · CAM 01</span>
+        <button class="lb-x" type="button" id="lb-close" aria-label="Close">✕</button>
+        <img id="lb-img" alt="">
+        <button class="lb-nav prev" type="button" id="lb-prev" aria-label="Previous photo">&lt;</button>
+        <button class="lb-nav next" type="button" id="lb-next" aria-label="Next photo">&gt;</button>
+      </dialog>
     <div class="panel" style="margin-top:16px">
       <div class="cta-row" id="photo-cta" style="margin-top:0"></div>
       <p class="note" id="photo-note"></p>
@@ -735,6 +753,20 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
   document.getElementById("reel-prev").onclick = () => go(cur - 1);
   document.getElementById("reel-next").onclick = () => go(cur + 1);
   reel.addEventListener("keydown", (e) => { if (e.key === "ArrowRight") { e.preventDefault(); go(cur + 1); } if (e.key === "ArrowLeft") { e.preventDefault(); go(cur - 1); } });
+  /* Tap a photo: open it large on the page (no new tab). */
+  const lb = document.getElementById("lightbox"), lbImg = document.getElementById("lb-img"), lbCam = document.getElementById("lb-cam");
+  let lbi = 0;
+  const lbShow = (i) => { lbi = (i + n) % n; const im = slides[lbi].querySelector("img"); lbImg.src = im.getAttribute("src"); lbImg.alt = im.alt;
+    lbCam.textContent = "REC · CAM " + String(lbi + 1).padStart(2, "0"); };
+  slides.forEach((s, k) => s.querySelector("a").addEventListener("click", (e) => { e.preventDefault(); lbShow(k); lb.showModal ? lb.showModal() : lb.setAttribute("open", ""); }));
+  document.getElementById("lb-close").onclick = () => lb.close();
+  document.getElementById("lb-prev").onclick = () => lbShow(lbi - 1);
+  document.getElementById("lb-next").onclick = () => lbShow(lbi + 1);
+  lb.addEventListener("click", (e) => { if (e.target === lb || e.target === lbImg) lb.close(); });
+  lb.addEventListener("keydown", (e) => { if (e.key === "ArrowRight") lbShow(lbi + 1); if (e.key === "ArrowLeft") lbShow(lbi - 1); });
+  lb.addEventListener("close", () => go(lbi));
+  let tx = null; lb.addEventListener("touchstart", (e) => { tx = e.touches[0].clientX; }, { passive: true });
+  lb.addEventListener("touchend", (e) => { if (tx === null) return; const d = e.changedTouches[0].clientX - tx; if (Math.abs(d) > 40) lbShow(lbi + (d < 0 ? 1 : -1)); tx = null; });
   show(0);
 })();
 </script>

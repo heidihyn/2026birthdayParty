@@ -269,6 +269,39 @@ section { padding-block: 28px 0; }
 .cred .hint { font-size: 13px; color: var(--muted); }
 .cred .copy { margin-top: 8px; padding: 9px 12px; font-size: 13.5px; }
 
+/* photo reel (post-party): surveillance feed */
+.feed { border: 1px solid var(--line); background: #05070a; padding: 10px; position: relative; }
+.feed-bar, .feed-ctl { display: flex; justify-content: space-between; align-items: center; gap: 10px; font: 500 11px/1 var(--mono); letter-spacing: .16em; color: var(--muted); }
+.feed-bar { padding: 2px 2px 10px; }
+.feed-bar .live { color: var(--alarm); animation: blink 1.4s steps(2) infinite; }
+@keyframes blink { 50% { opacity: .25; } }
+.reel { display: flex; gap: 12px; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none; padding: 4px 9% 8px; outline: none; }
+.reel::-webkit-scrollbar { display: none; }
+.slide { flex: 0 0 82%; margin: 0; scroll-snap-align: center; position: relative; aspect-ratio: 3 / 4; overflow: hidden; border: 1px solid #2a3544;
+  opacity: .35; filter: grayscale(.9) contrast(1.1); transform: scale(.94); transition: opacity .35s, filter .35s, transform .35s, box-shadow .35s; }
+.slide.wide { aspect-ratio: 4 / 3; align-self: center; }
+.slide.on { opacity: 1; filter: none; transform: none; box-shadow: -3px 0 0 rgba(255,59,78,.55), 3px 0 0 rgba(111,211,255,.55), 0 0 40px -10px rgba(111,211,255,.6); }
+.slide a, .slide img { display: block; width: 100%; height: 100%; }
+.slide img { object-fit: cover; }
+.slide::before { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 1;
+  background: repeating-linear-gradient(0deg, rgba(0,0,0,.22) 0 1px, transparent 1px 3px); mix-blend-mode: multiply; }
+.slide::after { content: ""; position: absolute; inset: 10px; pointer-events: none; z-index: 1;
+  background: linear-gradient(var(--ice),var(--ice)) top left/18px 2px, linear-gradient(var(--ice),var(--ice)) top left/2px 18px,
+    linear-gradient(var(--ice),var(--ice)) top right/18px 2px, linear-gradient(var(--ice),var(--ice)) top right/2px 18px,
+    linear-gradient(var(--ice),var(--ice)) bottom left/18px 2px, linear-gradient(var(--ice),var(--ice)) bottom left/2px 18px,
+    linear-gradient(var(--ice),var(--ice)) bottom right/18px 2px, linear-gradient(var(--ice),var(--ice)) bottom right/2px 18px;
+  background-repeat: no-repeat; }
+.slide .cam, .slide figcaption { position: absolute; z-index: 2; left: 18px; font: 500 11px/1 var(--mono); letter-spacing: .14em; padding: 5px 7px; background: rgba(5,7,10,.72); pointer-events: none; }
+.slide .cam { top: 18px; color: var(--alarm); }
+.slide figcaption { bottom: 18px; color: var(--ice); }
+.slide.on img { animation: glitch .45s steps(3) 1; }
+@keyframes glitch { 0% { transform: translateX(-6px); filter: hue-rotate(60deg) saturate(2); } 50% { transform: translateX(4px); } 100% { transform: none; filter: none; } }
+.feed-ctl { padding-top: 10px; }
+.feed-ctl .btn { padding: 10px 12px; font: 500 12px/1 var(--mono); letter-spacing: .12em; }
+.reel-prog { flex: 1; height: 2px; background: var(--line); position: relative; }
+.reel-prog span { position: absolute; left: 0; top: 0; bottom: 0; width: 14%; background: var(--ice); box-shadow: 0 0 8px var(--ice); transition: width .3s; }
+@media (min-width: 640px) { .slide { flex-basis: 58%; } .reel { padding-inline: 21%; } }
+
 /* feedback (post-party) */
 .fb-banner { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; border: 1px solid var(--ice); background: rgba(111,211,255,.07); padding: 14px 16px; margin-top: 18px; }
 .fb-banner p { margin: 0; font-size: 15.5px; }
@@ -619,17 +652,61 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
     </details>
   </section>
 
+
   <!-- PHOTO WALL -->
   <section id="photos">
-    <details class="fold">
+    <details class="fold" open>
       <summary class="sec-head">
       <span class="label">Surveillance footage</span>
       <h2>Photo wall</h2>
       <span class="chev" aria-hidden="true"></span></summary>
       <div class="fold-body">
-      <p class="lede" style="margin-bottom:16px">All activity in this building is monitored. Help HALO out: drop your photos from the night in the shared album.</p>
-    <div class="panel">
-      <div class="film" aria-hidden="true"><span>CAM 01</span><span>CAM 02</span><span>CAM 03</span></div>
+      <div class="feed">
+        <div class="feed-bar"><span class="live">● LIVE FEED</span><span id="reel-count">01 / 07</span></div>
+        <div class="reel" id="reel" tabindex="0" aria-label="Party photos, swipe or use arrow keys">
+        <figure class="slide wide" data-i="1">
+          <a href="photos/party-1.jpg" target="_blank" rel="noopener"><img src="photos/party-1.jpg" alt="The lobby before launch" loading="lazy"></a>
+          <span class="cam">REC · CAM 01</span>
+          <figcaption>&gt; lobby_pre_launch.jpg</figcaption>
+        </figure>
+        <figure class="slide" data-i="2">
+          <a href="photos/party-2.jpg" target="_blank" rel="noopener"><img src="photos/party-2.jpg" alt="Critical incident" loading="lazy"></a>
+          <span class="cam">REC · CAM 02</span>
+          <figcaption>&gt; critical_incident.jpg</figcaption>
+        </figure>
+        <figure class="slide" data-i="3">
+          <a href="photos/party-3.jpg" target="_blank" rel="noopener"><img src="photos/party-3.jpg" alt="The board votes" loading="lazy"></a>
+          <span class="cam">REC · CAM 03</span>
+          <figcaption>&gt; board_vote.jpg</figcaption>
+        </figure>
+        <figure class="slide" data-i="4">
+          <a href="photos/party-4.jpg" target="_blank" rel="noopener"><img src="photos/party-4.jpg" alt="Who was who" loading="lazy"></a>
+          <span class="cam">REC · CAM 04</span>
+          <figcaption>&gt; who_was_who.jpg</figcaption>
+        </figure>
+        <figure class="slide" data-i="5">
+          <a href="photos/party-5.jpg" target="_blank" rel="noopener"><img src="photos/party-5.jpg" alt="Guests at the party" loading="lazy"></a>
+          <span class="cam">REC · CAM 05</span>
+          <figcaption>&gt; exec_team_01.jpg</figcaption>
+        </figure>
+        <figure class="slide" data-i="6">
+          <a href="photos/party-6.jpg" target="_blank" rel="noopener"><img src="photos/party-6.jpg" alt="Guests at the party" loading="lazy"></a>
+          <span class="cam">REC · CAM 06</span>
+          <figcaption>&gt; exec_team_02.jpg</figcaption>
+        </figure>
+        <figure class="slide" data-i="7">
+          <a href="photos/party-7.jpg" target="_blank" rel="noopener"><img src="photos/party-7.jpg" alt="Guests at the party" loading="lazy"></a>
+          <span class="cam">REC · CAM 07</span>
+          <figcaption>&gt; exec_team_03.jpg</figcaption>
+        </figure>
+        </div>
+        <div class="feed-ctl">
+          <button class="btn ghost" type="button" id="reel-prev" aria-label="Previous photo">&lt; PREV</button>
+          <div class="reel-prog" aria-hidden="true"><span id="reel-bar"></span></div>
+          <button class="btn ghost" type="button" id="reel-next" aria-label="Next photo">NEXT &gt;</button>
+        </div>
+      </div>
+    <div class="panel" style="margin-top:16px">
       <div class="cta-row" id="photo-cta" style="margin-top:0"></div>
       <p class="note" id="photo-note"></p>
     </div>
@@ -643,6 +720,24 @@ footer { margin-top: 56px; padding-top: 18px; border-top: 1px solid var(--line);
   </footer>
 </div>
 
+<script>
+/* Photo reel: swipe or tap PREV/NEXT; the centered photo lights up. */
+(() => {
+  const reel = document.getElementById("reel"); if (!reel) return;
+  const slides = [...reel.querySelectorAll(".slide")], n = slides.length;
+  const count = document.getElementById("reel-count"), bar = document.getElementById("reel-bar");
+  let cur = 0;
+  const show = (i) => { cur = i; slides.forEach((s, k) => s.classList.toggle("on", k === i));
+    count.textContent = String(i + 1).padStart(2, "0") + " / " + String(n).padStart(2, "0"); bar.style.width = ((i + 1) / n * 100) + "%"; };
+  const go = (i) => { i = (i + n) % n; slides[i].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" }); };
+  const io = new IntersectionObserver((es) => es.forEach((e) => { if (e.isIntersecting) show(slides.indexOf(e.target)); }), { root: reel, threshold: 0.6 });
+  slides.forEach((s) => io.observe(s));
+  document.getElementById("reel-prev").onclick = () => go(cur - 1);
+  document.getElementById("reel-next").onclick = () => go(cur + 1);
+  reel.addEventListener("keydown", (e) => { if (e.key === "ArrowRight") { e.preventDefault(); go(cur + 1); } if (e.key === "ArrowLeft") { e.preventDefault(); go(cur - 1); } });
+  show(0);
+})();
+</script>
 <script>
 /* Feedback form: anonymous. Sends only the answers (no name, code or role) to FEEDBACK_URL. */
 (() => {
@@ -817,7 +912,7 @@ $("lookup-form").addEventListener("submit", async (e) => {
 /* Photo wall link */
 (function () {
   $("photo-cta").append(el("a", { class: "btn", href: CONFIG.photoUrl, target: "_blank", rel: "noopener" }, CONFIG.photoLabel + " ↗"));
-  $("photo-note").textContent = CONFIG.photoNote || "Open the event on Partiful and add your photos to its album. Everyone at the party can see them.";
+  $("photo-note").textContent = CONFIG.photoNote || "More photos are in the Partiful album. Add yours too.";
 })();
 
 /* ---- Verdict ---- */

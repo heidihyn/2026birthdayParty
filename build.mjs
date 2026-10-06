@@ -3,7 +3,7 @@
 // that only they get (in Heidi's DM), so the page source holds no readable role map and
 // knowing someone's phone number doesn't unlock their role.
 // Usage: node build.mjs   (run from this folder). Rebuilding resets the live vote results.
-import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, mkdirSync, copyFileSync, readdirSync } from "node:fs";
 import { webcrypto as crypto } from "node:crypto";
 
 const ITER = 600000;
@@ -131,5 +131,6 @@ const card = (g, s) => s.title ? `witness/role-witness-${slug(s.title)}.png` : `
 const dm = guests.map((g) => { const s = secrets.get(g); return `| ${g.name} | ${g.phone || "no number: they text you"} | ${g.code} | ${g.team} | ${s.title || g.role} | ${card(g, s)} | ${s.line} |`; });
 writeFileSync("dm-lines.md", "# Friday DMs (private: has phone numbers)\n\nSend each guest their card from printables/phone-cards/, the line, and their access code (they enter it at heidihyn.github.io/2026birthdayParty to re-read their role).\n\n| Name | Phone | Code | Team | Role | Card | Line |\n|---|---|---|---|---|---|---|\n" + dm.join("\n") + "\n");
 for (const f of ["nda.pdf", "nda-share.png", "og-image.png"]) copyFileSync(f, "standalone/" + f);
+if (existsSync("photos")) { mkdirSync("standalone/photos", { recursive: true }); for (const f of readdirSync("photos")) copyFileSync("photos/" + f, "standalone/photos/" + f); }
 console.log(`Built with ${guests.length} guests.`);
 if (problems.length) console.log("Check these:\n- " + problems.join("\n- "));
